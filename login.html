@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <title>面試流程模擬與評估系統｜登入</title>
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", sans-serif;
+            background: linear-gradient(135deg, #f3e9dc, #e2d1c3);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 45px 55px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 420px;
+        }
+
+        .system-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .interview-icon {
+            font-size: 60px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        .login-btn {
+            margin-top: 25px;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: #2a5298;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background-color: #1e3c72;
+        }
+
+        .register-btn {
+            margin-top: 15px;
+            width: 100%;
+            padding: 10px;
+            font-size: 15px;
+            color: #2a5298;
+            background-color: #f0f4ff;
+            border: 1px solid #2a5298;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .register-btn:hover {
+            background-color: #e0e8ff;
+        }
+
+        .footer-text {
+            margin-top: 25px;
+            font-size: 13px;
+            text-align: center;
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="interview-icon">🎤</div>
+        <div class="system-title">面試流程模擬與評估系統</div>
+
+        <!-- 登入表單 -->
+        <form action="login.php" method="POST">
+            <label for="username">帳號</label>
+            <input type="text" name="username" id="username" placeholder="請輸入您的帳號" required>
+
+            <label for="password">密碼</label>
+            <input type="password" name="password" id="password" placeholder="請輸入您的密碼" required>
+
+            <input type="submit" value="開始面試" class="login-btn">
+        </form>
+
+        <!-- 註冊 -->
+        <form action="register.php" method="GET">
+            <input type="submit" value="尚未註冊？前往註冊" class="register-btn">
+        </form>
+
+        <div class="footer-text">© 面試模擬系統｜祝您面試順利</div>
+    </div>
+</body>
+
+</html>
