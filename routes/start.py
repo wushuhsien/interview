@@ -25,7 +25,7 @@ def start():
             top: 0;
             left: 0;
             width:100%;
-            height: 70px;
+            height: 80px;
             background-color: #2a5298;
             display: flex;
             align-items: center;
@@ -57,7 +57,7 @@ def start():
             position: relative;
         }}
 
-        .cart-container, .user-account, .dropdown {{
+        .cart-container, .dropdown {{
             color: white;
             cursor: pointer;
         }}
@@ -128,6 +128,34 @@ def start():
             margin-top: 90px; /* 避免內容被固定頂欄蓋住 */
             padding: 20px;
         }}
+
+        /* 按鈕置右 */
+        .menu-items {{
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+        }}
+
+        /* 主按鈕 */
+        .menu-item {{
+            position: relative;
+            padding: 14px 18px;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 8px;
+            margin-left: 15px;
+            transition: all 0.25s ease;
+            font-size: 15px;
+            background: #4A90E2;
+            opacity: 0.95;
+        }}
+
+        .menu-item:hover {{
+            background: #357ABD;
+            box-shadow: 0 4px 12px rgba(53, 122, 189, 0.45);
+            transform: translateY(-1px);
+        }}
+
     </style>
     <script>
         function toggleDropdown() {{
@@ -156,10 +184,13 @@ def start():
 <body>
     <div class="top-menu">
         <h1 onclick="alert('前往會員首頁')">會員首頁</h1>
+        <div class="menu-items">
+            <div class="menu-item">面試測驗</div>
+        </div>
+               
         <div id="top-right-box">
-            <div class="user-account">歡迎 {username} !</div>
             <div class="dropdown">
-                <button class="dropbtn" onclick="toggleDropdown()">⚙️ 設定</button>
+                <button class="dropbtn" onclick="toggleDropdown()">歡迎 {username} !</button>
                 <div id="myDropdown" class="dropdown-content">
                     <button onclick="toggleSubMenu(event)">個人設定 ▼</button>
                     <div id="subMenu" class="sub-dropdown">
@@ -171,6 +202,7 @@ def start():
                 </div>
             </div>
         </div>
+                
     </div>
 
     <div class="content">
