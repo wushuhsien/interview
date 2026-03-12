@@ -47,6 +47,60 @@ def start():
             color: #e8f3ff;
         }}
 
+        /* 左側功能選單 */
+        .sidebar {{
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 220px;
+            height: calc(100% - 80px);
+            background: #d9e6ef;
+            box-shadow: 2px 0 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }}
+
+        /* 第一層選單 */
+        .sidebar button {{
+            border: none;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+            background: #c6d9e6;
+            cursor: pointer;
+            font-size: 15px;
+            border-bottom: 3px solid white;   /* 白線分隔 */
+        }}
+
+        /* hover效果 */
+        .sidebar button:hover {{
+            background: #8fb2c0;
+        }}
+
+        /* 子選單容器 */
+        .submenu {{
+            display: flex;
+            flex-direction: column;
+        }}
+
+        /* 第二層選單 */
+        .submenu button {{
+            padding: 12px 15px 12px 35px;   /* 往右縮排 */
+            font-weight: normal;
+            background: #e3eef5;
+            font-size: 14px;
+            border-bottom: 1px solid white;
+        }}
+
+        /* 子選單 hover */
+        .submenu button:hover {{
+            background: #c9dde8;
+        }}
+
+        .submenu {{
+            display: none;
+        }}
+
         /* 右側功能區 */
         #top-right-box {{
             display: flex;
@@ -63,7 +117,7 @@ def start():
         }}
 
         .dropbtn {{
-            background: #e0e8ff;       /* 藍色系，和導航列搭配 */
+            background: #c6d9e6;
             border: none;
             cursor: pointer;
             padding: 6px 12px;         /* 上下 6px，左右 12px */
@@ -77,7 +131,7 @@ def start():
         }}
 
         .dropbtn:hover {{
-            background: #2a4290;        /* hover 顏色加深 */
+            background: #8fb2c0;
             color: #ffffff; 
             box-shadow: 0 2px 6px rgba(0,0,0,0.25); /* 小陰影 */
         }}
@@ -125,39 +179,22 @@ def start():
         }}
 
         .content {{
-            margin-top: 90px; /* 避免內容被固定頂欄蓋住 */
+            margin-top: 90px;
+            margin-left: 240px;  /* 避開左側選單 */
             padding: 20px;
         }}
-
-        /* 按鈕置右 */
-        .menu-items {{
-            margin-left: auto;
-            display: flex;
-            align-items: center;
-        }}
-
-        /* 主按鈕 */
-        .menu-item {{
-            position: relative;
-            padding: 14px 18px;
-            color: #ffffff;
-            cursor: pointer;
-            border-radius: 8px;
-            margin-left: 15px;
-            transition: all 0.25s ease;
-            font-size: 15px;
-            background: #4A90E2;
-            opacity: 0.95;
-        }}
-
-        .menu-item:hover {{
-            background: #357ABD;
-            box-shadow: 0 4px 12px rgba(53, 122, 189, 0.45);
-            transform: translateY(-1px);
-        }}
-
+        
     </style>
     <script>
+        function toggleMenu(){{
+            var menu = document.getElementById("analysisMenu");
+
+            if(menu.style.display === "none"){{
+                menu.style.display = "flex";
+            }}else{{
+                menu.style.display = "none";
+            }}
+        }}
         function toggleDropdown() {{
             var dropdown = document.getElementById("myDropdown");
             dropdown.style.display = dropdown.style.display === "flex" ? "none" : "flex";
@@ -184,10 +221,18 @@ def start():
 <body>
     <div class="top-menu">
         <h1 onclick="alert('前往會員首頁')">會員首頁</h1>
-        <div class="menu-items">
-            <div class="menu-item">面試測驗</div>
+        
+        <!-- 左側功能選單 -->
+        <div class="sidebar">
+            <button onclick="alert('面試測驗')">面試測驗</button>
+            <button onclick="toggleMenu()">面試表現分析與評估 ▼</button>
+            <div id="analysisMenu" class="submenu">
+                <button onclick="alert('分析')">分析</button>
+                <button onclick="alert('評估')">評估</button>
+            </div>
+            <button onclick="alert('問題')">問題</button>
         </div>
-               
+
         <div id="top-right-box">
             <div class="dropdown">
                 <button class="dropbtn" onclick="toggleDropdown()">歡迎 {username} !</button>
@@ -197,7 +242,6 @@ def start():
                         <button onclick="alert('前往基本資料')">基本資料</button>
                         <button onclick="alert('前往面試紀錄')">面試紀錄</button>
                     </div>
-                    <button onclick="alert('前往問題頁面')">問題</button>
                     <button onclick="alert('登出')">登出</button>
                 </div>
             </div>
@@ -206,8 +250,7 @@ def start():
     </div>
 
     <div class="content">
-        <h1>開始面試</h1>
-        <p>歡迎 {username} 進入面試頁面</p>
+        <p>歡迎 {username} 進入首頁</p>
     </div>
 </body>
 </html>
