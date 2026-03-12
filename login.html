@@ -1,10 +1,3 @@
-from flask import Blueprint, render_template
-
-login_bp = Blueprint('login', __name__)
-
-@login_bp.route('/')
-def login_page():
-    return """
 <!DOCTYPE html>
 <html lang="zh-Hant">
 
@@ -123,7 +116,7 @@ def login_page():
         <div class="system-title">面試流程模擬與評估系統</div>
 
         <!-- 登入表單 -->
-        <form action="/start" method="POST">
+        <form action="start.html" method="POST">
             <label for="username">帳號</label>
             <input type="text" name="username" id="username" placeholder="請輸入您的帳號" required>
 
@@ -134,7 +127,7 @@ def login_page():
         </form>
 
         <!-- 註冊 -->
-        <form action="/register" method="GET">
+        <form action="register.html" method="GET">
             <input type="submit" value="尚未註冊？前往註冊" class="register-btn">
         </form>
 
@@ -143,4 +136,3 @@ def login_page():
 </body>
 
 </html>
-"""

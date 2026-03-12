@@ -1,67 +1,60 @@
-from flask import Blueprint, request
-
-start_bp = Blueprint('start', __name__)
-
-@start_bp.route('/start', methods=['POST'])
-def start():
-    username = request.form['username']
-    return f"""
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
     <meta charset="UTF-8">
     <title>面試流程模擬與評估系統｜開始面試</title>
     <style>
-        body {{
+        body {
             font-family: "Microsoft JhengHei", sans-serif;
             margin: 0;
             padding: 0;
             background: linear-gradient(135deg, #f3e9dc, #e2d1c3);
-        }}
+        }
 
         /* 固定頂部導航列 */
-        .top-menu {{
+        .top-menu {
             position: fixed;
             top: 0;
             left: 0;
-            width:100%;
+            width: 100%;
             height: 80px;
             background-color: #2a5298;
             display: flex;
             align-items: center;
             padding: 0 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
             z-index: 1000;
-        }}
+        }
 
-        .top-menu h1 {{
+        .top-menu h1 {
             color: #ffffff;
             font-size: 22px;
             margin: 0;
             letter-spacing: 1px;
             font-weight: 600;
             cursor: pointer;
-        }}
+        }
 
-        .top-menu h1:hover {{
+        .top-menu h1:hover {
             color: #e8f3ff;
-        }}
+        }
 
         /* 左側功能選單 */
-        .sidebar {{
+        .sidebar {
             position: fixed;
             top: 80px;
             left: 0;
             width: 220px;
             height: calc(100% - 80px);
             background: #d9e6ef;
-            box-shadow: 2px 0 6px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
-        }}
+        }
 
         /* 第一層選單 */
-        .sidebar button {{
+        .sidebar button {
             border: none;
             padding: 15px;
             text-align: left;
@@ -69,166 +62,181 @@ def start():
             background: #c6d9e6;
             cursor: pointer;
             font-size: 15px;
-            border-bottom: 3px solid white;   /* 白線分隔 */
-        }}
+            border-bottom: 3px solid white;
+            /* 白線分隔 */
+        }
 
         /* hover效果 */
-        .sidebar button:hover {{
+        .sidebar button:hover {
             background: #8fb2c0;
-        }}
+        }
 
         /* 子選單容器 */
-        .submenu {{
+        .submenu {
             display: flex;
             flex-direction: column;
-        }}
+        }
 
         /* 第二層選單 */
-        .submenu button {{
-            padding: 12px 15px 12px 35px;   /* 往右縮排 */
+        .submenu button {
+            padding: 12px 15px 12px 35px;
+            /* 往右縮排 */
             font-weight: normal;
             background: #e3eef5;
             font-size: 14px;
             border-bottom: 1px solid white;
-        }}
+        }
 
         /* 子選單 hover */
-        .submenu button:hover {{
+        .submenu button:hover {
             background: #c9dde8;
-        }}
+        }
 
-        .submenu {{
+        .submenu {
             display: none;
-        }}
+        }
 
         /* 右側功能區 */
-        #top-right-box {{
+        #top-right-box {
             display: flex;
             align-items: center;
             gap: 5px;
-            margin-left: auto;  /* 保持靠右 */
-            margin-right: 50px; /* 往左偏移 20px，可調整數值 */
+            margin-left: auto;
+            /* 保持靠右 */
+            margin-right: 50px;
+            /* 往左偏移 20px，可調整數值 */
             position: relative;
-        }}
+        }
 
-        .cart-container, .dropdown {{
+        .cart-container,
+        .dropdown {
             color: white;
             cursor: pointer;
-        }}
+        }
 
-        .dropbtn {{
+        .dropbtn {
             background: #c6d9e6;
             border: none;
             cursor: pointer;
-            padding: 6px 12px;         /* 上下 6px，左右 12px */
-            border-radius: 6px;        /* 小圓角 */
-            color: #000000;            /* 文字黑色 */
+            padding: 6px 12px;
+            /* 上下 6px，左右 12px */
+            border-radius: 6px;
+            /* 小圓角 */
+            color: #000000;
+            /* 文字黑色 */
             font-weight: 500;
-            transition: all 0.2s ease-in-out; /* 平滑過渡 */
+            transition: all 0.2s ease-in-out;
+            /* 平滑過渡 */
             display: flex;
             align-items: center;
             gap: 4px;
-        }}
+        }
 
-        .dropbtn:hover {{
+        .dropbtn:hover {
             background: #8fb2c0;
-            color: #ffffff; 
-            box-shadow: 0 2px 6px rgba(0,0,0,0.25); /* 小陰影 */
-        }}
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+            /* 小陰影 */
+        }
 
-        .dropbtn i {{
-            font-size: 20px;           /* 調整圖標大小 */
-            color: #ffffff;            /* 保持白色 */
-        }}
+        .dropbtn i {
+            font-size: 20px;
+            /* 調整圖標大小 */
+            color: #ffffff;
+            /* 保持白色 */
+        }
 
-        .dropdown-content {{
+        .dropdown-content {
             display: none;
             position: absolute;
-            flex-direction: column;  /* 垂直排列 */
+            flex-direction: column;
+            /* 垂直排列 */
             right: 0;
             background-color: #ffffff;
             min-width: 150px;
-            box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
             z-index: 1001;
             border-radius: 5px;
             overflow: hidden;
-        }}
+        }
 
-        .dropdown-content button {{
+        .dropdown-content button {
             width: 100%;
             padding: 10px;
             border: none;
             background: none;
             text-align: left;
             cursor: pointer;
-        }}
+        }
 
-        .dropdown-content button:hover {{
+        .dropdown-content button:hover {
             background-color: #e0e8ff;
-        }}
+        }
 
-        .sub-dropdown {{
+        .sub-dropdown {
             display: none;
-            flex-direction: column;  /* 子選單也垂直排列 */
+            flex-direction: column;
+            /* 子選單也垂直排列 */
             background-color: #f9faff;
-            border-left: 3px solid #4a90e2;
-        }}
+            border-left: 5px solid #4a90e2;
+        }
 
-        .sub-dropdown input[type="button"] {{
+        .sub-dropdown input[type="button"] {
             padding-left: 20px;
-        }}
+        }
 
-        .content {{
+        .content {
             margin-top: 90px;
-            margin-left: 240px;  /* 避開左側選單 */
+            margin-left: 240px;
+            /* 避開左側選單 */
             padding: 20px;
-        }}
-        
+        }
     </style>
     <script>
-        function toggleMenu(){{
+        function toggleMenu() {
             var menu = document.getElementById("analysisMenu");
 
-            if(menu.style.display === "none"){{
+            if (menu.style.display === "none") {
                 menu.style.display = "flex";
-            }}else{{
+            } else {
                 menu.style.display = "none";
-            }}
-        }}
-        function toggleDropdown() {{
+            }
+        }
+        function toggleDropdown() {
             var dropdown = document.getElementById("myDropdown");
             dropdown.style.display = dropdown.style.display === "flex" ? "none" : "flex";
-        }}
+        }
 
-        function toggleSubMenu(event) {{
+        function toggleSubMenu(event) {
             // 防止點擊子選單時觸發 window.onclick
             event.stopPropagation();
             var submenu = document.getElementById("subMenu");
             submenu.style.display = submenu.style.display === "flex" ? "none" : "flex";
-        }}
+        }
 
         // 點擊頁面空白處關閉 dropdown
-        window.onclick = function(event) {{
+        window.onclick = function (event) {
             var dropdown = document.getElementById("myDropdown");
-            if (!event.target.closest('.dropdown')) {{
+            if (!event.target.closest('.dropdown')) {
                 if (dropdown) dropdown.style.display = "none";
                 var submenu = document.getElementById("subMenu");
                 if (submenu) submenu.style.display = "none";
-            }}
-        }}
+            }
+        }
     </script>
 </head>
+
 <body>
     <div class="top-menu">
         <h1 onclick="alert('前往會員首頁')">會員首頁</h1>
-        
+
         <!-- 左側功能選單 -->
         <div class="sidebar">
             <button onclick="alert('面試測驗')">面試測驗</button>
-            <button onclick="toggleMenu()">面試表現分析與評估 ▼</button>
+            <button onclick="toggleMenu()">練習面試 ▼</button>
             <div id="analysisMenu" class="submenu">
-                <button onclick="alert('分析')">分析</button>
-                <button onclick="alert('評估')">評估</button>
+                <button onclick="alert('題庫')">題庫</button>
+                <button onclick="alert('AI題目')">AI題目</button>
             </div>
             <button onclick="alert('問題')">問題</button>
         </div>
@@ -240,18 +248,20 @@ def start():
                     <button onclick="toggleSubMenu(event)">個人設定 ▼</button>
                     <div id="subMenu" class="sub-dropdown">
                         <button onclick="alert('前往基本資料')">基本資料</button>
-                        <button onclick="alert('前往面試紀錄')">面試紀錄</button>
+                        <button onclick="alert('上傳履歷')">上傳履歷</button>
+                        <button onclick="alert('面試紀錄')">面試紀錄</button>
+                        <button onclick="alert('問題紀錄')">問題紀錄</button>
                     </div>
                     <button onclick="alert('登出')">登出</button>
                 </div>
             </div>
         </div>
-                
+
     </div>
 
     <div class="content">
         <p>歡迎 {username} 進入首頁</p>
     </div>
 </body>
+
 </html>
-"""
