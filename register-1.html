@@ -1,0 +1,503 @@
+<!-- <?php
+session_start();
+include "db.php";  // 這裡已經會產生 $storeTypes 陣列
+
+// 取得上一頁帳密與角色
+$username = $_SESSION['reg_username'] ?? '';
+$password = $_SESSION['reg_password'] ?? '';
+$role = $_SESSION['reg_role'] ?? '';
+
+if (!$username || !$password || $role === '') {
+    echo "<script>alert('請先完成第一步註冊！'); location.href='register.php';</script>";
+    exit;
+}
+
+// 建立資料庫
+if (isset($_POST['action']) && $_POST['action'] == 'create') {
+
+    // --- 新增：檢查帳號是否已存在 ---
+    $check_sql = "SELECT account FROM account WHERE account = ?";
+    $check_stmt = $link->prepare($check_sql);
+    $check_stmt->bind_param("s", $username);
+    $check_stmt->execute();
+    $check_stmt->store_result();
+
+    if ($check_stmt->num_rows > 0) {
+        echo "<script>alert('註冊失敗：帳號 $username 已經存在！請更換帳號。'); location.href='register.php';</script>";
+        exit;
+    }
+    $check_stmt->close();
+    // -----------------------------
+
+    // 新增 account 帳密資料表
+    $sql = "INSERT INTO account(account, password, created_time, role, permission, stop_reason)
+            VALUES (?, ?, CURRENT_TIMESTAMP(), ?, 0, NULL)";
+    $stmt = $link->prepare($sql);
+    $stmt->bind_param("ssi", $username, $password, $role);
+
+    if (!$stmt->execute()) {
+        echo "<script>alert('建立 account 失敗');</script>";
+        exit;
+    }
+
+
+    //如果是學生/教職員（role=0），新增student學生/教職員資料表
+    if ($role == 0) {
+
+        // 取得 student 最大流水號
+        $result = $link->query("SELECT MAX(student_id) AS maxid FROM student");
+        $row = $result->fetch_assoc();
+        $nextId = ($row['maxid'] === NULL ? 1 : $row['maxid'] + 1);
+
+        $stu_name = $_POST['stu_name'];
+        $stu_nick = $_POST['stu_nick'];
+        $stu_phone = $_POST['stu_phone'];
+        $stu_email = $_POST['stu_email'];
+        $acc = $username;
+
+        // 修改 SQL：VALUES 裡面只留 6 個問號
+        $sql2 = "INSERT INTO student(student_id, name, nickname, phone, email, account)
+         VALUES (?, ?, ?, ?, ?, ?)";
+
+        $stmt2 = $link->prepare($sql2);
+
+        // 修改 bind_param：對應 6 個參數 (格式字串也改成 6 個 's' 或 'i')
+        // student_id 是 int -> 'i'
+        // 其他 5 個是 string -> 's'
+        // 所以格式字串是 "isssss"
+        $stmt2->bind_param(
+            "isssss",
+            $nextId,
+            $stu_name,
+            $stu_nick,
+            $stu_phone,
+            $stu_email,
+            $acc
+        );
+
+        if ($stmt2->execute()) {
+            session_destroy();
+            echo "<script>alert('學生/教職員註冊成功！'); location.href='login.html';</script>";
+            exit;
+        } else {
+            echo "學生資料寫入失敗";
+            exit;
+        }
+    }
+
+    //如果是店家（role=3），新增store店家資料表
+    if ($role == 3) {
+
+        //取得store最大流水號
+        $result = $link->query("SELECT MAX(store_id) AS maxid FROM store");
+        $row = $result->fetch_assoc();
+        $nextId = ($row['maxid'] === NULL ? 1 : $row['maxid'] + 1);
+
+        $name = $_POST['store_name'];
+        $desc = $_POST['store_desc'];
+        $address = $_POST['store_address'];
+        $phone = $_POST['store_phone'];
+        $email = $_POST['store_email'];
+        $storetypeName = $_POST['store_type'];
+
+        // 用name找storetype_id
+        $stmtType = $link->prepare("SELECT storetype_id FROM storetype WHERE name=?");
+        $stmtType->bind_param("s", $storetypeName);
+        $stmtType->execute();
+        $typeResult = $stmtType->get_result();
+
+        if ($typeResult->num_rows == 0) {
+            echo "<script>alert('找不到店家類型！');</script>";
+            exit;
+        }
+        $storetype_id = $typeResult->fetch_assoc()['storetype_id'];
+
+        $sql2 = "INSERT INTO store(store_id, name, description, address, phone, email, storetype_id, account)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt2 = $link->prepare($sql2);
+        $stmt2->bind_param(
+            "isssssis",
+            $nextId,
+            $name,
+            $desc,
+            $address,
+            $phone,
+            $email,
+            $storetype_id,
+            $username
+        );
+
+        if ($stmt2->execute()) {
+            // 插入 storehours
+            if (!empty($_POST['open_time']) && !empty($_POST['close_time'])) {
+                foreach ($_POST['open_time'] as $weekday => $opens) {
+                    $closes = $_POST['close_time'][$weekday];
+                    for ($i = 0; $i < count($opens); $i++) {
+                        $open = $opens[$i];
+                        $close = $closes[$i];
+
+                        $stmtHour = $link->prepare("INSERT INTO storehours(weekday, open_time, close_time, account) VALUES (?, ?, ?, ?)");
+                        $stmtHour->bind_param("isss", $weekday, $open, $close, $username);
+                        $stmtHour->execute();
+                    }
+                }
+            }
+
+            session_destroy();
+            echo "<script>alert('店家註冊成功！'); location.href='login.html';</script>";
+            exit;
+        } else {
+            echo "店家資料寫入失敗";
+            exit;
+        }
+    }
+
+    // 註冊成功
+    if ($success) {
+        session_destroy();
+        echo "<script>alert('註冊成功！'); window.location='login.html';</script>";
+        exit;
+    }
+}
+?> -->
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <title>面試流程模擬與評估系統｜註冊</title>
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", sans-serif;
+            background: linear-gradient(135deg, #f3e9dc, #e2d1c3);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 45px 55px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 520px;
+        }
+
+        .system-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .form-box {
+            margin-top: 20px;
+        }
+
+        .form-box h3 {
+            text-align: center;
+            color: #1e3c72;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .interview-icon {
+            font-size: 60px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        select,
+        input[type="email"],
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        select:focus,
+        input:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        .required {
+            color: red;
+        }
+
+        /* 性別按鈕 */
+
+        .gender-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+
+        .gender-group label {
+            font-weight: normal;
+        }
+
+        /* 註冊按鈕 */
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #2a5298, #1e3c72);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            opacity: 0.9;
+        }
+
+        .login-btn {
+            margin-top: 25px;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: #2a5298;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background-color: #1e3c72;
+        }
+
+        .register-btn {
+            margin-top: 15px;
+            width: 100%;
+            padding: 10px;
+            font-size: 15px;
+            color: #2a5298;
+            background-color: #f0f4ff;
+            border: 1px solid #2a5298;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .register-btn:hover {
+            background-color: #e0e8ff;
+        }
+
+        .footer-text {
+            margin-top: 25px;
+            font-size: 13px;
+            text-align: center;
+            color: #888;
+        }
+
+        .role-select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .role-select:focus {
+            outline: none;
+            border-color: #2a5298;
+        }
+
+        .btn-group {
+            margin-top: 20px;
+        }
+
+        .next-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #2a5298, #1e3c72);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        .next-btn:hover {
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            width: 100%;
+            padding: 10px;
+            font-size: 15px;
+            color: #2a5298;
+            background-color: #f0f4ff;
+            border: 1px solid #2a5298;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background-color: #e0e8ff;
+        }
+    </style>
+    <script>
+        function showForm() {
+            var role = "<?php echo $role; ?>";
+            document.getElementById("studentForm").style.display = (role == "3") ? "block" : "none";
+            document.getElementById("workForm").style.display = (role == "0") ? "block" : "none";
+        }
+    </script>
+</head>
+<!-- onload="showForm()" -->
+
+<body>
+    <div class="container">
+        <div class="system-title">面試流程模擬與評估系統 註冊帳號</div>
+        <!-- 學生表單 -->
+        <form method="POST" action="" id="studentForm" class="form-box">
+
+            <h3>🎓學生註冊</h3>
+
+            <label><span class="required">*</span>身分：</label>
+            <select name="s_type" required>
+                <option value="">請選擇</option>
+
+                <?php foreach ($storeTypes as $type): ?>
+                <option value="<?php echo $type; ?>">
+                    <?php echo $type; ?>
+                </option>
+                <?php endforeach; ?>
+
+            </select>
+
+            <label><span class="required">*</span>性別：</label>
+
+            <div class="gender-group">
+                <label>
+                    <input type="radio" name="s_gender" value="男" required> 男
+                </label>
+
+                <label>
+                    <input type="radio" name="s_gender" value="女"> 女
+                </label>
+
+                <label>
+                    <input type="radio" name="s_gender" value="其他"> 其他
+                </label>
+            </div>
+
+            <label><span class="required">*</span>電話：</label>
+            <input type="text" name="s_phone" required pattern="(09\d{8}|0\d{1,3}\d{5,8})" title="請輸入手機（0912345678）或市話">
+
+            <label><span class="required">*</span>電子郵件：</label>
+            <input type="email" name="s_email" required>
+            <br>
+            <div class="btn-group">
+                <button type="button" value="back" class="back-btn"
+                    onclick="window.location.href='register.html'">上一頁</button>
+                <button type="submit" name="action" value="create" class="next-btn"
+                    onclick="window.location.href='login.html'">註冊</button>
+            </div>
+        </form>
+
+        <!-- 職場表單 -->
+        <form method="POST" action="" id="workForm" class="form-box">
+
+            <h3>💼職場註冊</h3>
+
+            <label><span class="required">*</span>領域：</label>
+
+            <select name="w_type" required>
+
+                <option value="">請選擇</option>
+
+                <?php foreach ($storeTypes as $type): ?>
+                <option value="<?php echo $type; ?>">
+                    <?php echo $type; ?>
+                </option>
+                <?php endforeach; ?>
+
+            </select>
+
+            <label><span class="required">*</span>性別：</label>
+
+            <div class="gender-group">
+
+                <label>
+                    <input type="radio" name="w_gender" value="男" required> 男
+                </label>
+
+                <label>
+                    <input type="radio" name="w_gender" value="女"> 女
+                </label>
+
+                <label>
+                    <input type="radio" name="w_gender" value="其他"> 其他
+                </label>
+
+            </div>
+
+            <label><span class="required">*</span>電話：</label>
+
+            <input type="text" name="w_phone" required pattern="(09\d{8}|0\d{1,3}\d{5,8})">
+
+            <label><span class="required">*</span>電子郵件：</label>
+
+            <input type="email" name="w_email" required>
+            <br>
+            <div class="btn-group">
+                <button type="button" value="back" class="back-btn"
+                    onclick="window.location.href='register.html'">上一頁</button>
+                <button type="submit" name="action" value="create" class="next-btn"
+                    onclick="window.location.href='login.html'">註冊</button>
+            </div>
+
+        </form>
+        <div class="footer-text">© 面試模擬系統｜祝您面試順利</div>
+    </div>
+</body>
+
+</html>
