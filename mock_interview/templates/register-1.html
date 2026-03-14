@@ -173,9 +173,9 @@ if (isset($_POST['action']) && $_POST['action'] == 'create') {
             background: linear-gradient(135deg, #f3e9dc, #e2d1c3);
             margin: 0;
             padding: 0;
-            display: flex;
+            /* display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: center; */
             height: 100vh;
         }
 
@@ -185,6 +185,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'create') {
             border-radius: 18px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             width: 520px;
+            margin: 30px auto; /* 上下間距 30px，自動水平置中 */
         }
 
         .system-title {
@@ -437,9 +438,9 @@ if (isset($_POST['action']) && $_POST['action'] == 'create') {
             <br>
             <div class="btn-group">
                 <button type="button" value="back" class="back-btn"
-                    onclick="window.location.href='register.html'">上一頁</button>
+                    onclick="window.location.href='/register'">上一頁</button>
                 <button type="submit" name="action" value="create" class="next-btn"
-                    onclick="window.location.href='login.html'">註冊</button>
+                    onclick="window.location.href='/login'">註冊</button>
             </div>
         </form>
 
@@ -490,9 +491,9 @@ if (isset($_POST['action']) && $_POST['action'] == 'create') {
             <br>
             <div class="btn-group">
                 <button type="button" value="back" class="back-btn"
-                    onclick="window.location.href='register.html'">上一頁</button>
+                    onclick="window.location.href='/register'">上一頁</button>
                 <button type="submit" name="action" value="create" class="next-btn"
-                    onclick="window.location.href='login.html'">註冊</button>
+                    onclick="window.location.href='/login'">註冊</button>
             </div>
 
         </form>

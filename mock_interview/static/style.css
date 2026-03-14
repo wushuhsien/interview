@@ -1,0 +1,36 @@
+body{
+    font-family: Arial;
+    text-align:center;
+    background:#f5f7fb;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+
+#wave{
+    display:flex;
+    justify-content:center;
+    margin-top:20px;
+}
+
+.bar{
+    width:4px;
+    height:20px;
+    margin:2px;
+    background:#4CAF50;
+    animation:wave 1s infinite ease-in-out;
+}
+
+@keyframes wave{
+    0%,100%{transform:scaleY(1);}
+    50%{transform:scaleY(3);}
+}
+
+button{
+    padding:5px 10px;
+    font-size:14px;
+    margin-top:5px;
+    cursor:pointer;
+}

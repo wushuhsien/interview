@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>面試流程模擬與評估系統｜註冊</title>
+    <title>面試流程模擬與評估系統｜登入</title>
     <style>
         body {
             font-family: "Microsoft JhengHei", sans-serif;
@@ -21,7 +21,7 @@
             padding: 45px 55px;
             border-radius: 18px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            width: 520px;
+            width: 420px;
         }
 
         .system-title {
@@ -107,84 +107,30 @@
             text-align: center;
             color: #888;
         }
-
-        .role-select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-            margin-bottom: 15px;
-        }
-
-        .role-select:focus {
-            outline: none;
-            border-color: #2a5298;
-        }
-
-        .btn-group {
-            margin-top: 20px;
-        }
-
-        .next-btn {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            color: white;
-            background: linear-gradient(135deg, #2a5298, #1e3c72);
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-bottom: 10px;
-        }
-
-        .next-btn:hover {
-            opacity: 0.9;
-        }
-
-        .back-btn {
-            width: 100%;
-            padding: 10px;
-            font-size: 15px;
-            color: #2a5298;
-            background-color: #f0f4ff;
-            border: 1px solid #2a5298;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        .back-btn:hover {
-            background-color: #e0e8ff;
-        }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <div class="system-title">面試流程模擬與評估系統 註冊帳號</div>
-        <!-- 註冊表單 -->
-        <form method="POST" action="">
+        <div class="interview-icon">🎤</div>
+        <div class="system-title">面試流程模擬與評估系統</div>
+
+        <!-- 登入表單 (送到 Flask /login POST) -->
+        <form action="/login" method="POST">
             <label for="username">帳號</label>
-            <input type="text" name="username" placeholder="請輸入您的帳號" required>
+            <input type="text" name="username" id="username" placeholder="請輸入您的帳號" required>
 
             <label for="password">密碼</label>
-            <input type="password" name="password" placeholder="請輸入您的密碼" required>
+            <input type="password" name="password" id="password" placeholder="請輸入您的密碼" required>
 
-            <label for="password">確認密碼</label>
-            <input type="password" name="confirm_password" placeholder="確認密碼" required><br>
-
-            <label for="role">選擇身分</label>
-            <select name="role" class="role-select"> <!-- 接資料庫角色代碼 -->
-                <option value="student">學生</option>
-                <option value="work">職場</option>
-            </select><br>
-
-            <div class="btn-group">
-                <button type="submit" name="action" value="next" class="next-btn" onclick="window.location.href='register-1.html'">下一頁</button>
-                <button type="button" class="back-btn" onclick="window.location.href='login.html'">返回登入</button>
-            </div>
+            <input type="submit" value="開始面試" class="login-btn">
         </form>
+
+        <!-- 註冊 -->
+        <form action="/register" method="GET">
+            <input type="submit" value="尚未註冊？前往註冊" class="register-btn">
+        </form>
+
         <div class="footer-text">© 面試模擬系統｜祝您面試順利</div>
     </div>
 </body>
