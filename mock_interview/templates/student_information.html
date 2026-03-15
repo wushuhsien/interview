@@ -1,0 +1,125 @@
+<style>
+    .info-container {
+        width: 900px;
+        /* 變寬 */
+        background: white;
+        padding: 40px 60px;
+        /* 內距變大 */
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        margin: 40px auto;
+        /* 置中 */
+    }
+
+    .info-container h2 {
+        margin-top: 0;
+        color: #1e3c72;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .info-container label {
+        display: block;
+        margin-top: 15px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .info-container input,
+    .info-container select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
+
+    .info-container input:focus,
+    .info-container select:focus {
+        outline: none;
+        border-color: #2a5298;
+    }
+
+    .gender-group {
+        display: flex;
+        gap: 25px;
+        /* 每個選項間距 */
+        align-items: center;
+    }
+
+    .gender-group label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        /* 圓圈與文字距離 */
+        font-weight: normal;
+    }
+
+    .save-btn {
+        margin-top: 25px;
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+        background: linear-gradient(135deg, #2a5298, #1e3c72);
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .save-btn:hover {
+        opacity: 0.9;
+    }
+</style>
+
+
+<div class="info-container">
+
+    <h2>您的基本資料</h2>
+    <label>帳號：</label>
+    <input type="text" placeholder="請輸入帳號">
+
+    <label>姓名：</label>
+    <input type="text" placeholder="請輸入姓名">
+
+    <label>密碼：</label>
+    <input type="password" placeholder="請輸入密碼">
+
+    <label>性別：</label>
+
+    <div class="gender-group">
+        <label>
+            <input type="radio" name="gender"> 男
+        </label>
+
+        <label>
+            <input type="radio" name="gender"> 女
+        </label>
+
+        <label>
+            <input type="radio" name="gender"> 其他
+        </label>
+    </div>
+
+    <label>學生身分：</label>
+
+    <select>
+        <option value="">請選擇</option>
+        <option>高中</option>
+        <option>大學生</option>
+        <option>研究所</option>
+    </select>
+
+    <label>電話：</label>
+    <input type="text" placeholder="例如 0912345678">
+
+    <label>電子郵件：</label>
+    <input type="email" placeholder="example@email.com">
+
+    <button class="save-btn">
+        儲存
+    </button>
+
+</div>

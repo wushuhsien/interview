@@ -39,6 +39,26 @@ def register_step2():
 def student_start():
     return render_template('student_start.html')
 
+# ===== 學生基本資料 =====
+@app.route('/student_information')
+def student_information():
+    return render_template('student_information.html')
+
+# ===== 學生上傳履歷 =====
+@app.route('/student_resume')
+def student_resume():
+    return render_template('student_resume.html')
+
+# ===== 學生面試紀錄 =====
+@app.route('/student_interview_history')
+def student_interview_history():
+    return render_template('student_interview_history.html')
+
+# ===== 學生問題紀錄 =====
+@app.route('/student_question_history')
+def student_question_history():
+    return render_template('student_question_history.html')
+
 # ===== 面試頁面 =====
 @app.route('/mock_interview')
 def mock_interview():

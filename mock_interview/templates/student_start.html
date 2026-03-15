@@ -186,10 +186,13 @@
         }
 
         .content {
-            margin-top: 90px;
+            margin-top: 80px;
             margin-left: 240px;
             /* 避開左側選單 */
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            /* 水平置中 */
         }
     </style>
     <script>
@@ -212,6 +215,16 @@
             event.stopPropagation();
             var submenu = document.getElementById("subMenu");
             submenu.style.display = submenu.style.display === "flex" ? "none" : "flex";
+        }
+
+        function loadPage(page) {
+
+            fetch(page)
+                .then(response => response.text())
+                .then(data => {
+                    document.querySelector(".content").innerHTML = data;
+                });
+
         }
 
         // 點擊頁面空白處關閉 dropdown
@@ -247,10 +260,18 @@
                 <div id="myDropdown" class="dropdown-content">
                     <button onclick="toggleSubMenu(event)">個人設定 ▼</button>
                     <div id="subMenu" class="sub-dropdown">
-                        <button onclick="alert('前往基本資料')">基本資料</button>
-                        <button onclick="alert('上傳履歷')">上傳履歷</button>
-                        <button onclick="alert('面試紀錄')">面試紀錄</button>
-                        <button onclick="alert('問題紀錄')">問題紀錄</button>
+                        <button onclick="loadPage('/student_information')">
+                            基本資料
+                        </button>
+                        <button onclick="loadPage('/student_resume')">
+                            上傳履歷
+                        </button>
+                        <button onclick="loadPage('/student_interview_history')">
+                            面試紀錄
+                        </button>
+                        <button onclick="loadPage('/student_question_history')">
+                            問題紀錄
+                        </button>
                     </div>
                     <button onclick="location.href='/login'">登出</button>
                 </div>
