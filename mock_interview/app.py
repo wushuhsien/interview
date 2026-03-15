@@ -19,20 +19,10 @@ emotion_counts = {"快樂":0, "平靜":0, "傷心":0, "生氣":0, "驚訝":0}
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        # 取得表單帳號密碼
         username = request.form.get('username')
         password = request.form.get('password')
-
-        # 這裡可以加驗證邏輯，例如比對資料庫
-        # if valid_user(username, password):
-        #     return redirect(url_for('student_start'))
-        # else:
-        #     return "帳號或密碼錯誤"
-
-        # 暫時先直接跳轉
         return redirect(url_for('student_start'))
 
-    # GET 時顯示登入頁
     return render_template('login.html')
 
 # ===== 註冊 =====
@@ -75,17 +65,23 @@ def next_question():
     current_index += 1
 
     filename = f"question_{current_index}.mp3"
-    audio_folder = os.path.join("static", "audio")
+
+    # 取得目前專案資料夾(mock_interview)
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # static/audio 路徑
+    audio_folder = os.path.join(base_dir, "static", "audio")
     os.makedirs(audio_folder, exist_ok=True)
+
     filepath = os.path.join(audio_folder, filename)
 
-    # 使用 gTTS 生成語音
+    # 生成語音
     tts = gTTS(text=q_text, lang="zh-TW")
     tts.save(filepath)
 
     return jsonify({
         "question": q_text,
-        "tts": f"/static/audio/{filename}",
+        "tts": f"/static/audio/{filename}?v={current_index}",  # 防止快取
         "end": False
     })
 
@@ -94,9 +90,18 @@ def next_question():
 def analyze():
     data = request.json
     emotion_key = data.get("emotion", "neutral")
-    mapping = {"happy":"快樂","neutral":"平靜","sad":"傷心","angry":"生氣","surprise":"驚訝"}
+
+    mapping = {
+        "happy":"快樂",
+        "neutral":"平靜",
+        "sad":"傷心",
+        "angry":"生氣",
+        "surprise":"驚訝"
+    }
+
     emotion = mapping.get(emotion_key,"平靜")
     emotion_counts[emotion] += 1
+
     return jsonify({"emotion": emotion})
 
 # ===== 面試報告 =====
