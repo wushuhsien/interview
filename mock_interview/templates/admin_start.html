@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <title>面試流程模擬與評估系統｜管理員</title>
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+            color: #111827;
+        }
+
+        /* 固定頂部導航列 */
+        .top-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background-color: #6b7280;
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+        }
+
+        .top-menu h1 {
+            color: #ffffff;
+            font-size: 22px;
+            margin: 0;
+            letter-spacing: 1px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .top-menu h1:hover {
+            color: #e5e7eb;
+        }
+
+        /* 左側功能選單 */
+        .sidebar {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 220px;
+            height: calc(100% - 80px);
+            background: #e5e7eb;
+            box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 第一層選單 */
+        .sidebar button {
+            border: none;
+            padding: 15px;
+            text-align: left;
+            font-weight: bold;
+            background: #d1d5db;
+            cursor: pointer;
+            font-size: 15px;
+            color: #111827;
+            border-bottom: 1px solid #ffffff;
+            /* 白線分隔 */
+        }
+
+        /* hover效果 */
+        .sidebar button:hover {
+            background: #9ca3af;
+            color: #ffffff;
+        }
+
+        /* 子選單容器 */
+        .submenu {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 第二層選單 */
+        .submenu button {
+            padding: 12px 15px 12px 35px;
+            /* 往右縮排 */
+            font-weight: normal;
+            background: #f9fafb;
+            color: #4b5563;
+            font-size: 14px;
+            border-bottom: 1px solid white;
+        }
+
+        /* 子選單 hover */
+        .submenu button:hover {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .submenu {
+            display: none;
+        }
+
+        /* 右側功能區 */
+        #top-right-box {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: auto;
+            /* 保持靠右 */
+            margin-right: 50px;
+            /* 往左偏移 20px，可調整數值 */
+            position: relative;
+        }
+
+        .cart-container,
+        .dropdown {
+            color: white;
+            cursor: pointer;
+        }
+
+        .dropbtn {
+            background: #e5e7eb;
+            border: none;
+            cursor: pointer;
+            padding: 6px 12px;
+            /* 上下 6px，左右 12px */
+            border-radius: 6px;
+            /* 小圓角 */
+            color: #111827;
+            /* 文字黑色 */
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+            /* 平滑過渡 */
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .dropbtn:hover {
+            background: #4b5563;
+            color: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+            /* 小陰影 */
+        }
+
+        .dropbtn i {
+            font-size: 20px;
+            /* 調整圖標大小 */
+            color: #ffffff;
+            /* 保持白色 */
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            flex-direction: column;
+            /* 垂直排列 */
+            right: 0;
+            background-color: #ffffff;
+            min-width: 150px;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .dropdown-content button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+            color: #111827;
+        }
+
+        .dropdown-content button:hover {
+            background-color: #f3f4f6;
+        }
+
+        .sub-dropdown {
+            display: none;
+            flex-direction: column;
+            /* 子選單也垂直排列 */
+            background-color: #f9fafb;
+            border-left: 5px solid #6b7280;
+        }
+
+        .sub-dropdown input[type="button"] {
+            padding-left: 20px;
+        }
+
+        .content {
+            margin-top: 80px;
+            margin-left: 240px;
+            /* 避開左側選單 */
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            /* 水平置中 */
+            background: #f5f5f5;
+        }
+    </style>
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById("analysisMenu");
+
+            if (menu.style.display === "none") {
+                menu.style.display = "flex";
+            } else {
+                menu.style.display = "none";
+            }
+        }
+        function toggleDropdown() {
+            var dropdown = document.getElementById("myDropdown");
+            dropdown.style.display = dropdown.style.display === "flex" ? "none" : "flex";
+        }
+
+        function toggleSubMenu(event) {
+            // 防止點擊子選單時觸發 window.onclick
+            event.stopPropagation();
+            var submenu = document.getElementById("subMenu");
+            submenu.style.display = submenu.style.display === "flex" ? "none" : "flex";
+        }
+
+        function loadPage(page) {
+
+            fetch(page)
+                .then(response => response.text())
+                .then(data => {
+                    document.querySelector(".content").innerHTML = data;
+                });
+
+        }
+
+        // 點擊頁面空白處關閉 dropdown
+        window.onclick = function (event) {
+            var dropdown = document.getElementById("myDropdown");
+            if (!event.target.closest('.dropdown')) {
+                if (dropdown) dropdown.style.display = "none";
+                var submenu = document.getElementById("subMenu");
+                if (submenu) submenu.style.display = "none";
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="top-menu">
+        <h1 onclick="alert('前往會員首頁')">管理員首頁</h1>
+
+        <!-- 左側功能選單 -->
+        <div class="sidebar">
+            <!-- <button class="btn start-btn" onclick="location.href='/mock_interview'">面試測驗</button> -->
+            <button onclick="toggleMenu()">面試模擬 ▼</button>
+            <div id="analysisMenu" class="submenu">
+                <button onclick="location.href='/mock_interview'">面試模擬</button>
+                <button onclick="alert('面試表現分析報告')">面試表現分析報告</button>
+                <button onclick="alert('題庫練習')">題庫練習</button>
+                <button onclick="alert('AI題目練習')">AI題目練習</button>
+            </div>
+            <button onclick="alert('問題')">問題</button>
+        </div>
+
+        <div id="top-right-box">
+            <div class="dropdown">
+                <button class="dropbtn" onclick="toggleDropdown()">歡迎 {username} !</button>
+                <div id="myDropdown" class="dropdown-content">
+                    <button onclick="toggleSubMenu(event)">個人設定 ▼</button>
+                    <div id="subMenu" class="sub-dropdown">
+                        <button onclick="loadPage('/student_information')">
+                            基本資料
+                        </button>
+                        <button onclick="loadPage('/student_resume')">
+                            上傳履歷
+                        </button>
+                        <button onclick="loadPage('/student_interview_history')">
+                            面試紀錄
+                        </button>
+                        <button onclick="loadPage('/admin_question_history')">
+                            問題紀錄
+                        </button>
+                    </div>
+                    <button onclick="location.href='/login'">登出</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="content">
+        <p>公告</p>
+    </div>
+</body>
+
+</html>
