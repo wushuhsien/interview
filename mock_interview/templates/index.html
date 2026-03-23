@@ -24,6 +24,14 @@
 
     <button id="startBtn">開始面試</button>
 
+    <div id="speech-text" style="color: black;">
+        等待題目撥放請稍等回答...
+    </div>
+
+    <button id="downloadBtn" onclick="downloadReport()" style="display:none;">
+        下載面試結果
+    </button>
+
     <script>
         const video = document.getElementById("video");
         const canvas = document.getElementById("canvas");
@@ -54,9 +62,9 @@
         // ===== 開啟攝影機 =====
         function startVideo() {
             navigator.mediaDevices.getUserMedia({
-                    video: true,
-                    audio: false
-                })
+                video: true,
+                audio: false
+            })
                 .then(stream => {
                     video.srcObject = stream;
                     video.onloadedmetadata = () => video.play();
@@ -66,15 +74,71 @@
                 });
         }
 
+        // ===== 語音辨識 + 每題存答案 =====
+        let recognition;
+        let finalTranscript = "";
+        let currentAnswer = "";
+
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+        } else {
+            alert("請使用 Chrome");
+        }
+
+        recognition.lang = "zh-TW";
+        recognition.continuous = true;
+        recognition.interimResults = true;
+
+        recognition.onresult = function (event) {
+            if (questionsEnded) return;
+            let interim = "";
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                let transcript = event.results[i][0].transcript;
+
+                if (event.results[i].isFinal) {
+                    currentAnswer += transcript + " ";
+                } else {
+                    interim += transcript;
+                }
+            }
+
+            document.getElementById("speech-text").innerText =
+                "🗣️ " + currentAnswer + interim;
+        };
+
+        // ⭐ 每題結束時呼叫
+        async function saveAnswer() {
+
+            // ⭐ 等語音結果進來（關鍵）
+            await new Promise(r => setTimeout(r, 800));
+
+            if (currentAnswer.trim() === "") return;
+
+            console.log("送出答案:", currentAnswer); // ⭐ debug用
+
+            await fetch("/save_answer", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    answer: currentAnswer
+                })
+            });
+
+            currentAnswer = "";
+        }
+
+        recognition.start();
+
         // ===== 即時表情偵測 =====
         function startFaceDetection() {
             setInterval(async () => {
                 if (questionsEnded || !faceApiLoaded) return;
 
                 const detections = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({
-                        inputSize: 224,
-                        scoreThreshold: 0.5
-                    }))
+                    inputSize: 224,
+                    scoreThreshold: 0.5
+                }))
                     .withFaceExpressions();
 
                 if (detections) {
@@ -139,26 +203,58 @@
         }
 
         // ===== 下一題 =====
-        function nextQuestion() {
-            fetch('/next_question')
-                .then(res => res.json())
-                .then(data => {
-                    if (data.end) {
-                        questionsEnded = true;
-                        // hideWave();
-                        getReport();
-                        return;
-                    }
+        let questionCount = 0;
+        async function nextQuestion() {
+            const res = await fetch('/next_question');
+            const data = await res.json();
 
-                    document.getElementById("question").innerText = data.question;
-                    let audio = new Audio(data.tts);
-                    audio.play();
-                    // showWave();
+            if (data.end) {
+                questionsEnded = true;
 
-                    audio.onended = () => {
-                        setTimeout(() => nextQuestion(), 3000);
-                    }
-                });
+                // ⭐ 停止語音（這裡才對）
+                recognition.stop();
+
+                // ⭐ 等最後語音進來
+                await new Promise(r => setTimeout(r, 800));
+
+                // ⭐ 存最後一題
+                if (currentAnswer.trim() !== "") {
+                    await saveAnswer();
+                }
+
+                getReport();
+                return;
+            }
+
+            // ⭐ 切題前：先停語音
+            recognition.stop();
+
+            // ⭐ 等語音進來
+            await new Promise(r => setTimeout(r, 800));
+
+            // ⭐ 存上一題
+            if (questionCount > 0 && currentAnswer.trim() !== "") {
+                await saveAnswer();
+            }
+
+            questionCount++;
+
+            document.getElementById("question").innerText = data.question;
+
+            let audio = new Audio(data.tts);
+            audio.play();
+
+            audio.onended = () => {
+
+                // ⭐ 清空答案
+                currentAnswer = "";
+                document.getElementById("speech-text").innerText = "請開始您的回答...";
+
+                // ⭐ 開始錄音
+                recognition.start();
+
+                setTimeout(() => nextQuestion(), 5000);
+            }
         }
 
         // ===== 取得報告 =====
@@ -166,6 +262,10 @@
             fetch('/report')
                 .then(res => res.json())
                 .then(data => {
+
+                    // 強制停止語音辨識
+                    recognition.stop();
+
                     let txt = "面試表情統計：\n";
                     for (const key in data) {
                         txt += `${key}：${data[key]} 次\n`;
@@ -174,11 +274,20 @@
                     emotionText.innerText = txt;
                     document.getElementById("question").innerText = "面試已結束";
 
+                    // 直接隱藏整個語音區塊（最乾淨）
+                    document.getElementById("speech-text").style.display = "none";
+                    //  顯示下載按鈕
+                    document.getElementById("downloadBtn").style.display = "block";
 
                     // ⭐ 將按鈕文字改為「回主頁」
                     startBtn.innerText = "回主頁";
                     startBtn.style.display = "block";
                 });
+        }
+
+        // ===== 下載面試結果 =====
+        function downloadReport() {
+            window.location.href = "/download_report";
         }
 
         // ===== 開始面試（含 reset） =====

@@ -67,8 +67,9 @@ def mock_interview():
 # ===== 重設面試 =====
 @app.route('/reset')
 def reset():
-    global emotion_counts, current_index
+    global emotion_counts, current_index, answers
     current_index = 0
+    answers = [] # 存每題回答
     for key in emotion_counts:
         emotion_counts[key] = 0
     return {"status":"reset ok"}
@@ -105,6 +106,36 @@ def next_question():
         "end": False
     })
 
+# ===== 存語音轉文字 =====
+@app.route('/save_answer', methods=['POST'])
+def save_answer():
+    global answers
+
+    data = request.json
+    answer_text = data.get("answer", "").strip()
+
+    # ❗ 空答案不存
+    if answer_text == "":
+        return jsonify({"status": "skip"})
+
+    question_index = len(answers)
+
+    # ❗ 超過題目就不存
+    if question_index >= len(questions):
+        return jsonify({"status": "ignore"})
+
+    question_text = questions[question_index]
+
+    answers.append({
+        "question": question_text,
+        "answer": answer_text
+    })
+
+    # print("✅ 收到答案：",answer_text)測試有沒有抓到語音轉文字
+
+    return jsonify({"status": "ok"})
+
+
 # ===== 表情分析 =====
 @app.route('/analyze', methods=['POST'])
 def analyze():
@@ -128,6 +159,26 @@ def analyze():
 @app.route('/report')
 def report():
     return jsonify(emotion_counts)
+
+# ===== 下載面試報告 =====
+@app.route('/download_report')
+def download_report():
+    from flask import Response
+
+    content = ""
+
+    for i, qa in enumerate(answers, start=1):
+        content += f"第{i}題：{qa['question']}\n"
+        content += f"回答：{qa['answer']}\n"
+        content += "-"*40 + "\n"
+
+    return Response(
+        content,
+        mimetype="text/plain",
+        headers={
+            "Content-Disposition": "attachment;filename=interview_report.txt"
+        }
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
