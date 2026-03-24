@@ -241,6 +241,9 @@
 
             document.getElementById("question").innerText = data.question;
 
+            // 顯示等待提示（這行是重點）
+            document.getElementById("speech-text").innerText = "等待題目撥放請稍等回答...";
+
             let audio = new Audio(data.tts);
             audio.play();
 
