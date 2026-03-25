@@ -34,3 +34,167 @@ button{
     margin-top:5px;
     cursor:pointer;
 }
+
+
+
+/* 頂部標題 */
+header {
+    background-color: #ffffff;
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+    border-bottom: 1px solid #ccc;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+    letter-spacing: 2px;
+}
+
+/* 主容器：左右並排 */
+.container {
+    display: flex;
+    flex: 1;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #ffffff;
+}
+
+/* --- 左側設定欄 --- */
+.sidebar {
+    width: 280px;
+    background-color: #ffffff;
+    padding: 40px 20px;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.setup-group {
+    margin-bottom: 25px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar label {
+    font-size: 18px;
+    white-space: nowrap;
+    margin-right: 10px;
+}
+
+.sidebar select {
+    flex: 1;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+}
+
+#startBtn {
+    margin-top: auto; /* 推到最下面 */
+    margin-left: 20px;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    background-color: #e0e0e0;
+    border: 1px solid #999;
+    border-radius: 4px;
+}
+
+/* --- 右側主內容區 --- */
+.main-content {
+    flex: 1;
+    padding: 30px;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 題目顯示區 (白色矩形框) */
+.question-container {
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+    min-height: 50px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+#question {
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+}
+
+/* 回答輸入區 */
+.answer-section {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    /* 預設隱藏或維持佔位可用 visibility */
+}
+
+#answer-input {
+    flex: 1;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #aaa;
+}
+
+#submit-answer {
+    padding: 8px 15px;
+    cursor: pointer;
+    background-color: #ffffff;
+    border: 1px solid #333;
+}
+
+/* 表情文字 */
+.emotion-status {
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+/* 視訊容器：確保有高度 */
+.video-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    height: 450px; /* 給定明確高度，或者使用 aspect-ratio */
+    background-color: #000; 
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+/* 關鍵：確保 video 標籤本身是顯示的且填滿容器 */
+#video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 讓畫面填滿不留白邊 */
+    display: block !important; /* 強制顯示 */
+}
+
+/* 結束面試按鈕 (在視訊畫面底部中央) */
+.end-interview-btn {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 15px;
+    background-color: #ffffff;
+    border: 1px solid #333;
+    cursor: pointer;
+    font-size: 14px;
+    z-index: 10;
+}
+
+.end-interview-btn:hover {
+    background-color: #f0f0f0;
+}

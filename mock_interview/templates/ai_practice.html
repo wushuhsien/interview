@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AI 模擬面試系統</title>
+    <link rel="stylesheet" href="/static/style.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+</head>
+
+<body>
+
+    <header>
+        <h1>AI 模擬面試系統</h1>
+    </header>
+
+    <div class="container">
+        <aside class="sidebar">
+            <div class="setup-group">
+                <label for="identity">身份：</label>
+                <select id="identity">
+                    <option value="fresh_graduate">應屆畢業生</option>
+                    <option value="career_changer">轉職者</option>
+                </select>
+            </div>
+
+            <div class="setup-group">
+                <label for="group">職群：</label>
+                <select id="group"></select>
+            </div>
+
+            <div class="setup-group">
+                <label for="position">職位：</label>
+                <select id="position"></select>
+            </div>
+
+            <button id="startBtn">開始面試</button>
+        </aside>
+
+        <main class="main-content">
+            <div class="question-container">
+                <h2 id="question">正在準備面試...</h2>
+            </div>
+
+            <div id="answer-section" class="answer-section">
+                <input type="text" id="answer-input" placeholder="輸入你的回答">
+                <button id="submit-answer">提交回答</button>
+            </div>
+
+            <div class="emotion-status">
+                <span id="emotion">目前表情：偵測中...</span>
+            </div>
+
+            <div class="video-container">
+                <video id="video" autoplay muted></video>
+                <canvas id="canvas" style="display:none"></canvas>
+                <button id="endBtn" class="end-interview-btn">結束面試</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const video = document.getElementById("video");
+        const canvas = document.getElementById("canvas");
+        const startBtn = document.getElementById("startBtn");
+        const endBtn = document.getElementById("endBtn"); 
+        const emotionText = document.getElementById("emotion");
+
+        let questionsEnded = false;
+        let faceApiLoaded = false;
+        let localStream = null; // 用來儲存視訊串流，以便後續關閉
+
+        // ===== 初始化職群與職位 =====
+        let positionsData = {};
+
+        $.get("/positions", function(data){
+            positionsData = data;
+            const groupSelect = $("#group");
+            groupSelect.empty();
+            for(let group in positionsData){
+                groupSelect.append(`<option value="${group}">${group}</option>`);
+            }
+            updatePositions();
+        });
+
+        function updatePositions(){
+            const group = $("#group").val();
+            const posSelect = $("#position");
+            posSelect.empty();
+            const positions = positionsData[group];
+            if(positions){
+                for(let pos of positions){
+                    posSelect.append(`<option value="${pos}">${pos}</option>`);
+                }
+            }
+        }
+
+        $("#group").change(updatePositions);
+
+        // ===== 初始化 face-api.js =====
+        async function loadFaceApi() {
+            while (typeof faceapi === "undefined") {
+                await new Promise(r => setTimeout(r, 100));
+            }
+            await faceapi.nets.tinyFaceDetector.loadFromUri('/static/models');
+            await faceapi.nets.faceExpressionNet.loadFromUri('/static/models');
+            console.log("Face-api.js 模型載入完成");
+            faceApiLoaded = true;
+            // 頁面載入時先不開啟鏡頭，點擊「開始面試」再開啟
+        }
+
+        // ===== 開啟攝影機 =====
+        function startVideo() {
+            navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+                .then(stream => {
+                    localStream = stream; // 儲存串流
+                    video.srcObject = stream;
+                    video.onloadedmetadata = () => {
+                        video.play();
+                        video.style.display = "block";
+                    };
+                })
+                .catch(err => {
+                    console.error("無法開啟攝影機: ", err);
+                    alert("請確保已允許攝影機權限");
+                });
+                
+            video.addEventListener('playing', () => startFaceDetection());
+        }
+
+        // ===== 關閉攝影機 =====
+        function stopVideo() {
+            if (localStream) {
+                // 停止所有視訊軌道
+                localStream.getTracks().forEach(track => track.stop());
+                video.srcObject = null;
+                localStream = null;
+                console.log("視訊鏡頭已關閉");
+            }
+        }
+
+        function startFaceDetection() {
+            const detectionInterval = setInterval(async () => {
+                // 如果面試結束或串流已關閉，停止偵測迴圈
+                if (questionsEnded || !faceApiLoaded || !localStream) {
+                    clearInterval(detectionInterval);
+                    return;
+                }
+                
+                const detections = await faceapi.detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({
+                        inputSize: 224,
+                        scoreThreshold: 0.5
+                    }))
+                    .withFaceExpressions();
+
+                if (detections) {
+                    const exp = detections.expressions;
+                    const maxEmotion = Object.keys(exp).reduce((a, b) => exp[a] > exp[b] ? a : b);
+                    const mapping = {
+                        happy: "快樂", neutral: "平靜", sad: "傷心", angry: "生氣", surprise: "驚訝"
+                    };
+                    const emotion = mapping[maxEmotion] || maxEmotion;
+                    emotionText.innerText = "目前表情：" + emotion;
+
+                    fetch('/analyze', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ emotion: maxEmotion })
+                    }).catch(err => console.log("傳送失敗", err));
+                } else {
+                    emotionText.innerText = "目前表情：未偵測到臉";
+                }
+            }, 1000);
+        }
+
+        loadFaceApi();
+
+        function goHomePage() {
+            window.location.href = "/student_start";
+        }
+
+        function nextQuestion() {
+            fetch('/ai_next_question')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.end) {
+                        questionsEnded = true;
+                        getReport();
+                        return;
+                    }
+                    document.getElementById("question").innerText = data.question;
+                    document.getElementById("answer-section").style.visibility = "visible";
+
+                    let audio = new Audio(data.tts);
+                    audio.play();
+
+                    document.getElementById("submit-answer").onclick = async () => {
+                        const answer = document.getElementById("answer-input").value.trim();
+                        if(!answer) return;
+
+                        await fetch('/submit_answer', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                answer: answer,
+                                question_id: data.question_id
+                            })
+                        });
+
+                        document.getElementById("answer-input").value = "";
+                        document.getElementById("answer-section").style.visibility = "hidden";
+                        setTimeout(() => nextQuestion(), 500);
+                    };
+                });
+        }
+
+        // 取得報告並自動關閉鏡頭
+        function getReport() {
+            // 1. 立即關閉視訊鏡頭
+            stopVideo();
+
+            fetch('/report')
+                .then(res => res.json())
+                .then(data => {
+                    let txt = "面試表情統計：\n";
+                    for (const key in data) {
+                        txt += `${key}：${data[key]} 次\n`;
+                    }
+                    emotionText.innerText = txt;
+                    document.getElementById("question").innerText = "面試已結束";
+                    startBtn.innerText = "回主頁";
+                    startBtn.style.display = "block";
+                });
+        }
+
+        // ===== 開始面試按鈕事件 =====
+        startBtn.addEventListener("click", async () => {
+            if (startBtn.innerText === "回主頁") {
+                goHomePage();
+                return;
+            }
+
+            await fetch('/ai_reset');
+            
+            // 啟動面試時才開啟鏡頭
+            startVideo();
+            
+            const identity = $("#identity").val();
+            const position = $("#position").val();
+            await fetch('/set_interview', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ identity, position })
+            });
+
+            questionsEnded = false;
+            document.getElementById("question").innerText = "面試準備中...";
+            emotionText.innerText = "目前表情：偵測中...";
+            startBtn.style.display = "none";
+
+            setTimeout(() => nextQuestion(), 1500);
+        });
+
+        // 結束面試按鈕
+        endBtn.addEventListener("click", () => {
+            if(confirm("確定要結束面試並關閉鏡頭嗎？")) {
+                questionsEnded = true;
+                getReport(); // 這會觸發 stopVideo()
+            }
+        });
+    </script>
+        
+</body>
+</html>
