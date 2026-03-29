@@ -97,22 +97,15 @@
         <label>
             <input type="radio" name="gender"> 女
         </label>
-
-        <label>
-            <input type="radio" name="gender"> 其他
-        </label>
     </div>
 
-    <label>學生身分：</label>
+    <label>身分：</label>
+    <select name="role" class="role-select"> <!-- 接資料庫角色代碼 -->
+        <option value="student">升學</option>
+        <option value="work">就業</option>
+    </select><br>
 
-    <select>
-        <option value="">請選擇</option>
-        <option>高中</option>
-        <option>大學生</option>
-        <option>研究所</option>
-    </select>
-
-    <label>電話：</label>
+    <label>連絡電話：</label>
     <input type="text" placeholder="例如 0912345678">
 
     <label>電子郵件：</label>

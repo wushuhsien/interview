@@ -188,11 +188,99 @@
         .content {
             margin-top: 80px;
             margin-left: 240px;
-            /* 避開左側選單 */
-            padding: 20px;
+            padding: 40px;
             display: flex;
             justify-content: center;
-            /* 水平置中 */
+            background: transparent;
+        }
+
+        /* 中央內容容器 */
+        .content-wrapper {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        /* 標題美化 */
+        .content h2 {
+            text-align: center;
+            font-size: 26px;
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .content h2::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #2a5298, #6dd5fa);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        /* 公告卡片 */
+        .announcement-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 22px;
+            margin-bottom: 25px;
+            transition: all 0.35s ease;
+            border-left: 6px solid #2a5298;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        /* hover效果 */
+        .announcement-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.18);
+        }
+
+        /* 標題 */
+        .announcement-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2a5298;
+        }
+
+        /* 日期 */
+        .announcement-date {
+            font-size: 13px;
+            color: #999;
+            margin: 6px 0 12px;
+        }
+
+        /* 內容 */
+        .announcement-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #444;
+        }
+
+        /* 圖片 */
+        .announcement-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        /* 圖片hover微放大 */
+        .announcement-card:hover .announcement-img {
+            transform: scale(1.03);
+        }
+
+        /* 無資料提示 */
+        .no-data {
+            text-align: center;
+            color: #bbb;
+            margin-top: 60px;
+            font-size: 16px;
         }
     </style>
     <script>
@@ -219,17 +307,15 @@
         }
 
         function loadPage(page) {
-
             fetch(page)
                 .then(response => response.text())
                 .then(data => {
                     document.querySelector(".content").innerHTML = data;
                 });
-
         }
 
         // 點擊頁面空白處關閉 dropdown
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             var dropdown = document.getElementById("myDropdown");
             if (!event.target.closest('.dropdown')) {
                 if (dropdown) dropdown.style.display = "none";
@@ -242,7 +328,7 @@
 
 <body>
     <div class="top-menu">
-        <h1 onclick="alert('前往會員首頁')">會員首頁</h1>
+        <h1 onclick="location.href='/student_start'">會員首頁</h1>
 
         <!-- 左側功能選單 -->
         <div class="sidebar">
@@ -253,7 +339,7 @@
                 <button onclick="alert('題庫練習')">題庫練習</button>
                 <button onclick="location.href='/ai_practice'">AI題目練習</button>
             </div>
-            <button onclick="alert('問題')">問題</button>
+            <button onclick="loadPage('/student_question')">問題</button>
         </div>
 
         <div id="top-right-box">
@@ -283,7 +369,40 @@
     </div>
 
     <div class="content">
-        <p>公告</p>
+        <div class="content-wrapper">
+            <h2>📢 公告專區</h2>
+
+            <!-- 公告1（有圖片） -->
+            <div class="announcement-card">
+                <div class="announcement-title">歡迎會員活動 🎉</div>
+                <div class="announcement-date">2026/04/01 ～ 2026/04/31</div>
+                <div class="announcement-content">
+                    歡迎加入會員，立即體驗更多功能與專屬服務。
+                </div>
+                <img src="https://picsum.photos/800/300" class="announcement-img">
+            </div>
+
+            <!-- 公告2（沒有圖片） -->
+            <div class="announcement-card">
+                <div class="announcement-title">系統維護通知</div>
+                <div class="announcement-date">2026/04/05 00:00 ～ 06:00</div>
+                <div class="announcement-content">
+                    系統將於凌晨進行例行維護，期間可能無法使用，敬請見諒。
+                </div>
+            </div>
+
+            <div class="announcement-card">
+                <div class="announcement-title">會員升級活動 🎉</div>
+                <div class="announcement-date">2026/05/01 ～ 2026/05/31</div>
+                <div class="announcement-content">
+                    現在升級會員享有 8 折優惠！立即體驗更多功能與專屬服務。
+                </div>
+                <img src="https://picsum.photos/800/300" class="announcement-img">
+            </div>
+
+            <!-- 沒資料時顯示 -->
+            <!-- <div class="no-data">目前沒有公告</div> -->
+        </div>
     </div>
 </body>
 

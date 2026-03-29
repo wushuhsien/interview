@@ -64,6 +64,11 @@ def student_interview_history():
     return render_template('student_interview_history.html')
 
 # ===== 學生問題紀錄 =====
+@app.route('/student_question')
+def student_question():
+    return render_template('student_question.html')
+
+# ===== 學生問題紀錄 =====
 @app.route('/student_question_history')
 def student_question_history():
     return render_template('student_question_history.html')

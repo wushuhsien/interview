@@ -185,7 +185,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'create') {
             border-radius: 18px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             width: 520px;
-            margin: 30px auto; /* 上下間距 30px，自動水平置中 */
+            margin: 30px auto;
+            /* 上下間距 30px，自動水平置中 */
         }
 
         .system-title {
@@ -397,12 +398,12 @@ if (isset($_POST['action']) && $_POST['action'] == 'create') {
 <body>
     <div class="container">
         <div class="system-title">面試流程模擬與評估系統 註冊帳號</div>
-        <!-- 學生表單 -->
+        <!-- 升學表單 -->
         <form method="POST" action="" id="studentForm" class="form-box">
 
-            <h3>🎓學生註冊</h3>
+            <h3>🎓升學註冊</h3>
 
-            <label><span class="required">*</span>身分：</label>
+            <label><span class="required">*</span>專業/科系：</label>
             <select name="s_type" required>
                 <option value="">請選擇</option>
 
@@ -424,13 +425,9 @@ if (isset($_POST['action']) && $_POST['action'] == 'create') {
                 <label>
                     <input type="radio" name="s_gender" value="女"> 女
                 </label>
-
-                <label>
-                    <input type="radio" name="s_gender" value="其他"> 其他
-                </label>
             </div>
 
-            <label><span class="required">*</span>電話：</label>
+            <label><span class="required">*</span>連絡電話：</label>
             <input type="text" name="s_phone" required pattern="(09\d{8}|0\d{1,3}\d{5,8})" title="請輸入手機（0912345678）或市話">
 
             <label><span class="required">*</span>電子郵件：</label>
@@ -444,12 +441,12 @@ if (isset($_POST['action']) && $_POST['action'] == 'create') {
             </div>
         </form>
 
-        <!-- 職場表單 -->
+        <!-- 就業表單 -->
         <form method="POST" action="" id="workForm" class="form-box">
 
-            <h3>💼職場註冊</h3>
+            <h3>💼就業註冊</h3>
 
-            <label><span class="required">*</span>領域：</label>
+            <label><span class="required">*</span>職群：</label>
 
             <select name="w_type" required>
 
@@ -463,6 +460,19 @@ if (isset($_POST['action']) && $_POST['action'] == 'create') {
 
             </select>
 
+            <label><span class="required">*</span>職位：</label>
+
+            <select name="w_type" required>
+
+                <option value="">請選擇</option>
+
+                <?php foreach ($storeTypes as $type): ?>
+                <option value="<?php echo $type; ?>">
+                    <?php echo $type; ?>
+                </option>
+                <?php endforeach; ?>
+
+            </select>
             <label><span class="required">*</span>性別：</label>
 
             <div class="gender-group">
@@ -474,14 +484,9 @@ if (isset($_POST['action']) && $_POST['action'] == 'create') {
                 <label>
                     <input type="radio" name="w_gender" value="女"> 女
                 </label>
-
-                <label>
-                    <input type="radio" name="w_gender" value="其他"> 其他
-                </label>
-
             </div>
 
-            <label><span class="required">*</span>電話：</label>
+            <label><span class="required">*</span>連絡電話：</label>
 
             <input type="text" name="w_phone" required pattern="(09\d{8}|0\d{1,3}\d{5,8})">
 

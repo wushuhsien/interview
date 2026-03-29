@@ -1,0 +1,128 @@
+<style>
+    .info-container {
+        width: 900px;
+        /* 變寬 */
+        background: white;
+        padding: 40px 60px;
+        /* 內距變大 */
+        border-radius: 14px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        margin: 40px auto;
+        /* 置中 */
+    }
+
+    .info-container h2 {
+        margin-top: 0;
+        color: #1e3c72;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .info-container input,
+    .info-container textarea {
+        width: 100%;
+        padding: 12px;
+        margin-top: 8px;
+        margin-bottom: 18px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+        transition: 0.2s;
+    }
+
+    .info-container input:focus,
+    .info-container textarea:focus {
+        border-color: #2a5298;
+        outline: none;
+        box-shadow: 0 0 5px rgba(42, 82, 152, 0.3);
+    }
+
+    .info-container textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    /* 圖片預覽區 */
+    #preview {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .preview-img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+
+    .save-btn {
+        margin-top: 25px;
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+        background: linear-gradient(135deg, #2a5298, #1e3c72);
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .save-btn:hover {
+        opacity: 0.9;
+    }
+</style>
+
+<script>
+    document.getElementById("imageUpload").addEventListener("change", function (event) {
+        const preview = document.getElementById("preview");
+        preview.innerHTML = ""; // 清空舊圖
+
+        const files = event.target.files;
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            if (!file.type.startsWith("image/")) continue;
+
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const img = document.createElement("img");
+                img.src = e.target.result;
+                img.classList.add("preview-img");
+                preview.appendChild(img);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+
+<div class="info-container">
+
+    <h2>問題回報</h2>
+
+    <!-- 問題標題 -->
+    <label>問題標題</label>
+    <input type="text" placeholder="請輸入問題標題">
+
+    <!-- 問題敘述 -->
+    <label>問題敘述</label>
+    <textarea placeholder="請詳細描述您遇到的問題..."></textarea>
+
+    <!-- 圖片上傳 -->
+    <label>上傳圖片（可多張）</label>
+    <input type="file" id="imageUpload" multiple accept="image/*">
+
+    <!-- 預覽區 -->
+    <div id="preview"></div>
+
+    <button class="save-btn">
+        上傳
+    </button>
+
+</div>
