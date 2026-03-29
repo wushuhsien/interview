@@ -15,7 +15,7 @@ def generate_question(identity, position, category):
 1. 語氣：自然口語，像真人面試官在聊天，不要太生硬。
 2. 內容：必須精準符合「{position}」的職場情境。
 3. 優先度：優先選擇該類別中最常見、最必問的題目（例如：{category}如果是自我介紹，就直接問自我介紹）。
-4. 長度：約 15~25 字。
+4. 長度：約 15~20 字。
 5. 限制：只輸出問題文字，不要有標號或額外解釋。
 
 範例參考：
@@ -26,7 +26,7 @@ def generate_question(identity, position, category):
         model="gemini-2.5-flash",
         contents=prompt,
         config=types.GenerateContentConfig(
-            max_output_tokens=500,
+            max_output_tokens=800,
             temperature=0.7,
         )
     )
