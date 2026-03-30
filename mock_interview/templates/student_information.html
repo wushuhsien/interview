@@ -49,15 +49,23 @@
     }
 
     .gender-group label {
-        display: flex;
+        display: inline-flex;
         align-items: center;
-        gap: 5px;
-        /* 圓圈與文字距離 */
+        gap: 6px;
+        margin-right: 20px;
         font-weight: normal;
     }
 
-    .save-btn {
-        margin-top: 25px;
+    #student-fields,
+    #work-fields {
+        transition: all 0.3s ease;
+    }
+
+    #work-fields {
+        display: none;
+    }
+
+    .next-btn {
         width: 100%;
         padding: 12px;
         font-size: 16px;
@@ -67,52 +75,134 @@
         border: none;
         border-radius: 10px;
         cursor: pointer;
+        margin-bottom: 10px;
     }
 
-    .save-btn:hover {
+    .next-btn:hover {
         opacity: 0.9;
     }
+
+    .back-btn {
+        width: 100%;
+        padding: 10px;
+        font-size: 15px;
+        color: #2a5298;
+        background-color: #f0f4ff;
+        border: 1px solid #2a5298;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .back-btn:hover {
+        background-color: #e0e8ff;
+    }
 </style>
+<script>
+function initStudentForm() {
+    const roleSelect = document.getElementById("role-select");
+    const studentFields = document.getElementById("student-fields");
+    const workFields = document.getElementById("work-fields");
 
+    // ⭐ 防呆（避免抓不到元素爆掉）
+    if (!roleSelect || !studentFields || !workFields) return;
 
+    function toggleFields() {
+        const isStudent = roleSelect.value === "student";
+
+        studentFields.style.display = isStudent ? "block" : "none";
+        workFields.style.display = isStudent ? "none" : "block";
+
+        const sType = document.querySelector("[name='s_type']");
+        const wGroup = document.querySelector("[name='w_type_group']");
+        const wJob = document.querySelector("[name='w_type_job']");
+
+        if (sType) sType.required = isStudent;
+        if (wGroup) wGroup.required = !isStudent;
+        if (wJob) wJob.required = !isStudent;
+    }
+
+    // 初始化
+    toggleFields();
+
+    // 綁定事件（避免重複綁）
+    roleSelect.removeEventListener("change", toggleFields);
+    roleSelect.addEventListener("change", toggleFields);
+}
+</script>
 <div class="info-container">
 
     <h2>您的基本資料</h2>
-    <label>帳號：</label>
-    <input type="text" placeholder="請輸入帳號">
+    <form method="POST" action="">
+        <label>帳號</label>
+        <input type="text" name="username" required>
 
-    <label>姓名：</label>
-    <input type="text" placeholder="請輸入姓名">
+        <label>姓名</label>
+        <input type="text" name="name" required>
 
-    <label>密碼：</label>
-    <input type="password" placeholder="請輸入密碼">
+        <label>密碼</label>
+        <input type="password" name="password" required>
 
-    <label>性別：</label>
+        <label>確認密碼</label>
+        <input type="password" name="confirm_password" required>
 
-    <div class="gender-group">
-        <label>
-            <input type="radio" name="gender"> 男
-        </label>
+        <label>選擇身分</label>
+        <select name="role" id="role-select">
+            <option value="student">升學</option>
+            <option value="work">就業</option>
+        </select>
 
-        <label>
-            <input type="radio" name="gender"> 女
-        </label>
-    </div>
+        <!-- 升學 -->
+        <div id="student-fields">
+            <label>專業/科系：</label>
+            <select name="s_type">
+                <option value="">請選擇</option>
+                <?php foreach ($storeTypes as $type): ?>
+                <option value="<?= $type ?>">
+                    <?= $type ?>
+                </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
 
-    <label>身分：</label>
-    <select name="role" class="role-select"> <!-- 接資料庫角色代碼 -->
-        <option value="student">升學</option>
-        <option value="work">就業</option>
-    </select><br>
+        <!-- 就業 -->
+        <div id="work-fields">
+            <label>職群：</label>
+            <select name="w_type_group">
+                <option value="">請選擇</option>
+                <?php foreach ($storeTypes as $type): ?>
+                <option value="<?= $type ?>">
+                    <?= $type ?>
+                </option>
+                <?php endforeach; ?>
+            </select>
 
-    <label>連絡電話：</label>
-    <input type="text" placeholder="例如 0912345678">
+            <label>職位：</label>
+            <select name="w_type_job">
+                <option value="">請選擇</option>
+                <?php foreach ($storeTypes as $type): ?>
+                <option value="<?= $type ?>">
+                    <?= $type ?>
+                </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
 
-    <label>電子郵件：</label>
-    <input type="email" placeholder="example@email.com">
+        <label>性別：</label>
+        <div class="gender-group">
+            <label><input type="radio" name="s_gender" value="男" required> 男</label>
+            <label><input type="radio" name="s_gender" value="女"> 女</label>
+        </div>
 
-    <button class="save-btn">
-        儲存
-    </button>
+        <label>連絡電話：</label>
+        <input type="text" name="s_phone" required>
+
+        <label>電子郵件：</label>
+        <input type="email" name="s_email" required>
+
+        <div class="btn-group">
+            <button type="submit" class="next-btn">修改資料</button>
+            <button type="button" class="back-btn" onclick="location.href='/student_start'">返回登入</button>
+        </div>
+    </form>
 
 </div>

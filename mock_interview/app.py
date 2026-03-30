@@ -48,6 +48,11 @@ def register_step2():
 def student_start():
     return render_template('student_start.html')
 
+# ===== 學生公告 =====
+@app.route('/student_announcement')
+def student_announcement():
+    return render_template('student_announcement.html')
+
 # ===== 學生基本資料 =====
 @app.route('/student_information')
 def student_information():

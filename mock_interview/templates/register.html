@@ -7,12 +7,15 @@
     <style>
         body {
             font-family: "Microsoft JhengHei", sans-serif;
-            background: linear-gradient(135deg, #f3e9dc, #e2d1c3);
+            background: #f3e9dc;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
+            /* 改這裡 */
+            padding-top: 60px;
+            /* 跟上方距離 */
             height: 100vh;
         }
 
@@ -20,16 +23,20 @@
             background: #ffffff;
             padding: 45px 55px;
             border-radius: 18px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
             width: 520px;
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
         }
 
         .system-title {
-            font-size: 28px;
+            font-size: 30px;
             font-weight: bold;
             color: #1e3c72;
-            margin-bottom: 10px;
-            text-align: center;
+            margin-bottom: 5px;
         }
 
         .subtitle {
@@ -47,25 +54,27 @@
 
         label {
             display: block;
-            margin-top: 15px;
-            margin-bottom: 5px;
+            margin-top: 18px;
+            margin-bottom: 8px;
             font-weight: bold;
             color: #333;
         }
 
-        input[type="text"],
-        input[type="password"] {
+        input,
+        select {
             width: 100%;
             padding: 12px;
             border-radius: 10px;
+            margin-bottom: 10px;
             border: 1px solid #ccc;
-            font-size: 16px;
+            font-size: 15px;
+            transition: all 0.25s ease;
         }
 
-        input[type="text"]:focus,
-        input[type="password"]:focus {
-            outline: none;
+        input:focus,
+        select:focus {
             border-color: #2a5298;
+            box-shadow: 0 0 8px rgba(42, 82, 152, 0.2);
         }
 
         .login-btn {
@@ -122,6 +131,28 @@
             border-color: #2a5298;
         }
 
+        .gender-group {
+            display: flex;
+            gap: 25px;
+            /* 每個選項間距 */
+            align-items: center;
+        }
+
+        /* 性別排版 */
+        .gender-group label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-right: 20px;
+            font-weight: normal;
+        }
+
+        #student-fields,
+        #work-fields {
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
         .btn-group {
             margin-top: 20px;
         }
@@ -168,6 +199,9 @@
             <label for="username">帳號</label>
             <input type="text" name="username" placeholder="請輸入您的帳號" required>
 
+            <label for="name">姓名</label>
+            <input type="text" name="name" placeholder="請輸入您的姓名" required>
+
             <label for="password">密碼</label>
             <input type="password" name="password" placeholder="請輸入您的密碼" required>
 
@@ -180,13 +214,90 @@
                 <option value="work">就業</option>
             </select><br>
 
+            <!-- 升學 -->
+            <div id="student-fields">
+                <label><span class="required"></span>專業/科系：</label>
+                <select name="s_type">
+                    <option value="">請選擇</option>
+                    <?php foreach ($storeTypes as $type): ?>
+                    <option value="<?php echo $type; ?>">
+                        <?php echo $type; ?>
+                    </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <!-- 就業 -->
+            <div id="work-fields">
+                <label><span class="required"></span>職群：</label>
+                <select name="w_type_group">
+                    <option value="">請選擇</option>
+                    <?php foreach ($storeTypes as $type): ?>
+                    <option value="<?php echo $type; ?>">
+                        <?php echo $type; ?>
+                    </option>
+                    <?php endforeach; ?>
+                </select>
+
+                <label><span class="required"></span>職位：</label>
+                <select name="w_type_job">
+                    <option value="">請選擇</option>
+                    <?php foreach ($storeTypes as $type): ?>
+                    <option value="<?php echo $type; ?>">
+                        <?php echo $type; ?>
+                    </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <label><span class="required"></span>性別：</label>
+
+            <div class="gender-group">
+                <label>
+                    <input type="radio" name="s_gender" value="男" required> 男
+                </label>
+
+                <label>
+                    <input type="radio" name="s_gender" value="女"> 女
+                </label>
+            </div>
+
+            <label><span class="required"></span>連絡電話：</label>
+            <input type="text" name="s_phone" required pattern="(09\d{8}|0\d{1,3}\d{5,8})" title="請輸入手機（0912345678）或市話">
+
+            <label><span class="required"></span>電子郵件：</label>
+            <input type="email" name="s_email" required>
+
             <div class="btn-group">
-                <button type="button" name="action" value="next" class="next-btn" onclick="window.location.href='/register-1'">下一頁</button>
+                <button type="button" name="action" value="next" class="next-btn"
+                    onclick="window.location.href='/login'">註冊</button>
                 <button type="button" class="back-btn" onclick="window.location.href='/login'">返回登入</button>
             </div>
         </form>
         <div class="footer-text">© 面試模擬系統｜祝您面試順利</div>
     </div>
 </body>
+<script>
+    const roleSelect = document.querySelector("select[name='role']");
+    const studentFields = document.getElementById("student-fields");
+    const workFields = document.getElementById("work-fields");
+
+    function toggleFields() {
+        const isStudent = roleSelect.value === "student";
+
+        studentFields.style.display = isStudent ? "block" : "none";
+        workFields.style.display = isStudent ? "none" : "block";
+
+        document.querySelector("[name='s_type']").required = isStudent;
+        document.querySelector("[name='w_type_group']").required = !isStudent;
+        document.querySelector("[name='w_type_job']").required = !isStudent;
+    }
+
+    // 初始化（頁面載入時）
+    toggleFields();
+
+    // 監聽變化
+    roleSelect.addEventListener("change", toggleFields);
+</script>
 
 </html>
