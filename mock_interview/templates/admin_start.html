@@ -205,36 +205,63 @@
     <script>
         function toggleMenu() {
             var menu = document.getElementById("analysisMenu");
-
-            if (menu.style.display === "none") {
-                menu.style.display = "flex";
-            } else {
-                menu.style.display = "none";
-            }
+            menu.style.display = menu.style.display === "none" ? "flex" : "none";
         }
+
         function toggleDropdown() {
             var dropdown = document.getElementById("myDropdown");
             dropdown.style.display = dropdown.style.display === "flex" ? "none" : "flex";
         }
 
         function toggleSubMenu(event) {
-            // 防止點擊子選單時觸發 window.onclick
             event.stopPropagation();
             var submenu = document.getElementById("subMenu");
             submenu.style.display = submenu.style.display === "flex" ? "none" : "flex";
         }
 
-        function loadPage(page) {
+        // 問題敘述縮放
+        function showDetail(time, title, desc, status, img) {
+            console.log("有進來"); // ⭐測試用
 
+            document.getElementById("d-time").innerText = time;
+            document.getElementById("d-title").innerText = title;
+            document.getElementById("d-desc").innerText = desc;
+            document.getElementById("d-status").innerText = status;
+
+            if (img) {
+                document.getElementById("d-img").src = img;
+                document.getElementById("d-img").style.display = "block";
+            } else {
+                document.getElementById("d-img").style.display = "none";
+            }
+
+            document.getElementById("detailModal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("detailModal").style.display = "none";
+        }
+
+        window.addEventListener("click", function (event) {
+            let modal = document.getElementById("detailModal");
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+
+        function loadPage(page) {
             fetch(page)
                 .then(response => response.text())
                 .then(data => {
                     document.querySelector(".content").innerHTML = data;
-                });
 
+                    // ⭐⭐⭐ 關鍵：載入後手動初始化
+                    if (typeof initStudentForm === "function") {
+                        initStudentForm();
+                    }
+                });
         }
 
-        // 點擊頁面空白處關閉 dropdown
         window.onclick = function (event) {
             var dropdown = document.getElementById("myDropdown");
             if (!event.target.closest('.dropdown')) {
@@ -248,18 +275,19 @@
 
 <body>
     <div class="top-menu">
-        <h1 onclick="alert('前往管理員首頁')">管理員首頁</h1>
+        <h1 onclick="location.href='/admin_start'">管理員首頁</h1>
 
         <!-- 左側功能選單 -->
         <div class="sidebar">
             <!-- <button class="btn start-btn" onclick="location.href='/mock_interview'">面試測驗</button> -->
+            <button onclick="loadPage('/admin_announcement')">公告</button>
             <button onclick="toggleMenu()">面試模擬 ▼</button>
             <div id="analysisMenu" class="submenu">
                 <button onclick="location.href='/mock_interview'">面試對話AI模擬</button>
                 <button onclick="alert('題庫練習')">題庫練習</button>
-                <button onclick="alert('AI題目練習')">AI題目練習</button>
+                <button onclick="location.href='/ai_practice'">AI題目練習</button>
             </div>
-            <button onclick="alert('問題')">問題</button>
+            <button onclick="loadPage('/admin_question_history')">問題</button>
         </div>
 
         <div id="top-right-box">
@@ -289,7 +317,7 @@
     </div>
 
     <div class="content">
-        <p>公告</p>
+        儀錶板
     </div>
 </body>
 

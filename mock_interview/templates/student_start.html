@@ -238,6 +238,36 @@
             submenu.style.display = submenu.style.display === "flex" ? "none" : "flex";
         }
 
+        // 問題敘述縮放
+        function showDetail(time, title, desc, status, img) {
+            console.log("有進來"); // ⭐測試用
+
+            document.getElementById("d-time").innerText = time;
+            document.getElementById("d-title").innerText = title;
+            document.getElementById("d-desc").innerText = desc;
+            document.getElementById("d-status").innerText = status;
+
+            if (img) {
+                document.getElementById("d-img").src = img;
+                document.getElementById("d-img").style.display = "block";
+            } else {
+                document.getElementById("d-img").style.display = "none";
+            }
+
+            document.getElementById("detailModal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("detailModal").style.display = "none";
+        }
+
+        window.addEventListener("click", function (event) {
+            let modal = document.getElementById("detailModal");
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+
         function loadPage(page) {
             fetch(page)
                 .then(response => response.text())

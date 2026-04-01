@@ -1,15 +1,13 @@
 <style>
     .info-container {
         width: 900px;
-        /* 變寬 */
         background: white;
         padding: 40px 60px;
-        /* 內距變大 */
         border-radius: 14px;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         margin: 40px auto;
-        /* 置中 */
     }
+
     .info-container h2 {
         margin-top: 0;
         color: #1e3c72;
@@ -17,31 +15,80 @@
         margin-bottom: 25px;
     }
 
-    .save-btn {
-        margin-top: 25px;
+    /* 表格 */
+    table {
         width: 100%;
-        padding: 12px;
+        border-collapse: collapse;
         font-size: 16px;
-        font-weight: bold;
-        color: white;
-        background: linear-gradient(135deg, #2a5298, #1e3c72);
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
     }
 
-    .save-btn:hover {
-        opacity: 0.9;
+    th, td {
+        padding: 12px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #1e3c72;
+        color: white;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f5f7fa;
+    }
+
+    tr:hover {
+        background-color: #e3ecff;
+    }
+
+    /* 按鈕 */
+    .btn {
+        padding: 6px 12px;
+        border: none;
+        border-radius: 6px;
+        background-color: #1e3c72;
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn:hover {
+        background-color: #2a5298;
     }
 </style>
-
 
 <div class="info-container">
 
     <h2>面試紀錄</h2>
 
-    <button class="save-btn">
-        儲存
-    </button>
+    <table>
+        <thead>
+            <tr>
+                <th>時間</th>
+                <th>科系 / 職業</th>
+                <th>面試類型</th>
+                <th>查看報告</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>2026-04-01</td>
+                <td>資訊工程</td>
+                <td>模擬面試</td>
+                <td><button class="btn">查看</button></td>
+            </tr>
+            <tr>
+                <td>2026-04-02</td>
+                <td>行銷專員</td>
+                <td>正式面試</td>
+                <td><button class="btn">查看</button></td>
+            </tr>
+            <tr>
+                <td>2026-04-03</td>
+                <td>設計師</td>
+                <td>線上面試</td>
+                <td><button class="btn">查看</button></td>
+            </tr>
+        </tbody>
+    </table>
 
 </div>

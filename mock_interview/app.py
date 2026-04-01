@@ -78,9 +78,15 @@ def student_question():
 def student_question_history():
     return render_template('student_question_history.html')
 
+# ===== 管理員主頁 =====
+@app.route('/admin_start')
+def admin_start():
+    return render_template('admin_start.html')
 
-
-
+# ===== 管理員問題 =====
+@app.route('/admin_question_history')
+def admin_question_history():
+    return render_template('admin_question_history.html')
 
 
 # ===== 面試頁面 =====

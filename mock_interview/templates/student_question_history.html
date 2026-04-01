@@ -1,47 +1,198 @@
 <style>
     .info-container {
         width: 900px;
-        /* 變寬 */
-        background: white;
+        background: rgba(255, 255, 255, 0.95);
         padding: 40px 60px;
-        /* 內距變大 */
-        border-radius: 14px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        margin: 40px auto;
-        /* 置中 */
+        border-radius: 18px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        margin: 50px auto;
+        backdrop-filter: blur(10px);
     }
+
     .info-container h2 {
         margin-top: 0;
         color: #1e3c72;
         text-align: center;
-        margin-bottom: 25px;
+        margin-bottom: 30px;
+        font-size: 28px;
+        letter-spacing: 2px;
     }
 
-    .save-btn {
-        margin-top: 25px;
+    /* 表格 */
+    table {
         width: 100%;
-        padding: 12px;
+        border-collapse: collapse;
         font-size: 16px;
-        font-weight: bold;
-        color: white;
-        background: linear-gradient(135deg, #2a5298, #1e3c72);
-        border: none;
+        overflow: hidden;
         border-radius: 10px;
-        cursor: pointer;
     }
 
-    .save-btn:hover {
-        opacity: 0.9;
+    th, td {
+        padding: 14px;
+        text-align: center;
+    }
+
+    th {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        font-weight: 600;
+    }
+
+    tr {
+        transition: 0.3s;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f8faff;
+    }
+
+    tr:hover {
+        background-color: #e6f0ff;
+        transform: scale(1.01);
+    }
+
+    /* 狀態 */
+    .status-done {
+        color: #2ecc71;
+        font-weight: bold;
+    }
+
+    .status-processing {
+        color: #f39c12;
+        font-weight: bold;
+    }
+
+    .status-pending {
+        color: #e74c3c;
+        font-weight: bold;
+    }
+
+    /* 按鈕 */
+    .view-btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 20px;
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+        font-size: 14px;
+    }
+
+    .view-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+        background: white;
+        width: 420px;
+        margin: 10% auto;
+        padding: 25px 30px;
+        border-radius: 14px;
+        position: relative;
+        animation: fadeIn 0.3s ease;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    }
+
+    @keyframes fadeIn {
+        from {opacity: 0; transform: translateY(-20px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+
+    .modal-content h3 {
+        text-align: center;
+        color: #1e3c72;
+        margin-bottom: 20px;
+    }
+
+    .modal-content p {
+        margin: 10px 0;
+        font-size: 15px;
+    }
+
+    .close-btn {
+        position: absolute;
+        right: 15px;
+        top: 10px;
+        cursor: pointer;
+        font-size: 18px;
+        color: #888;
+    }
+
+    .close-btn:hover {
+        color: #e74c3c;
+    }
+
+    img {
+        border-radius: 10px;
+        margin-top: 10px;
     }
 </style>
-
 
 <div class="info-container">
 
     <h2>問題紀錄</h2>
 
-    <button class="save-btn">
-        儲存
-    </button>
+    <table>
+        <thead>
+            <tr>
+                <th>時間</th>
+                <th>問題標題</th>
+                <th>處理狀態</th>
+                <th>查看</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>2026-04-01</td>
+                <td>登入失敗問題</td>
+                <td class="status-pending">未處理</td>
+                <td>
+                    <button class="view-btn" onclick="showDetail('2026-04-01','登入失敗問題','使用者無法登入系統，顯示404錯誤','未處理','https://via.placeholder.com/300')">
+                        查看
+                    </button>
+                </td>
+            </tr>
 
+            <tr>
+                <td>2026-03-30</td>
+                <td>履歷上傳失敗</td>
+                <td class="status-done">已處理</td>
+                <td>
+                    <button class="view-btn" onclick="showDetail('2026-03-30','履歷上傳失敗','PDF檔案上傳時出現錯誤','已處理','https://via.placeholder.com/300')">
+                        查看
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- 彈窗 -->
+<div id="detailModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">✖</span>
+        <h3>問題詳細資訊</h3>
+        <p><strong>時間：</strong><span id="d-time"></span></p>
+        <p><strong>標題：</strong><span id="d-title"></span></p>
+        <p><strong>問題敘述：</strong><span id="d-desc"></span></p>
+        <p><strong>狀態：</strong><span id="d-status"></span></p>
+        <p><strong>圖片：</strong><br>
+            <img id="d-img" style="max-width:100%;">
+        </p>
+    </div>
 </div>
