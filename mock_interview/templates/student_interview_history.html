@@ -27,46 +27,50 @@
         border-radius: 10px;
     }
 
+    /* 表頭 */
+    th {
+        background: #e3eaf3;
+        /* 淡灰藍 */
+        color: #2c3e50;
+        font-weight: 600;
+    }
+
+    /* 儲存格 */
     th,
     td {
         padding: 14px;
         text-align: center;
+        border-bottom: 1px solid #eef2f7;
     }
 
-    th {
-        background: linear-gradient(135deg, #1e3c72, #2a5298);
-        color: white;
-        font-weight: 600;
-    }
-
-    tr {
-        transition: 0.3s;
-    }
-
+    /* 偶數列 */
     tr:nth-child(even) {
-        background-color: #f8faff;
+        background-color: #f9fbfd;
     }
 
+    /* hover（變淡，不要太亮） */
     tr:hover {
-        background-color: #e6f0ff;
-        transform: scale(1.01);
+        background-color: #f1f6fb;
     }
 
-    /* 按鈕 */
-    .view-btn {
+    /* 按鈕（改柔和） */
+    .view-btn,
+    .download-btn {
         padding: 8px 16px;
         border: none;
         border-radius: 20px;
-        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        background: #6b8bb6;
+        /* 柔和藍 */
         color: white;
         cursor: pointer;
-        transition: 0.3s;
+        transition: 0.2s;
         font-size: 14px;
     }
 
-    .view-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    /* hover 按鈕 */
+    .view-btn:hover,
+    .download-btn:hover {
+        background: #5a7aa3;
     }
 </style>
 
@@ -79,28 +83,28 @@
             <tr>
                 <th>時間</th>
                 <th>科系 / 職業</th>
-                <th>面試類型</th>
                 <th>查看報告</th>
+                <th>下載報告</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>2026-04-01</td>
                 <td>資訊工程</td>
-                <td>模擬面試</td>
                 <td><button class="view-btn">查看</button></td>
+                <td><button class="download-btn">下載</button></td>
             </tr>
             <tr>
                 <td>2026-04-02</td>
                 <td>行銷專員</td>
-                <td>正式面試</td>
                 <td><button class="view-btn">查看</button></td>
+                <td><button class="download-btn">下載</button></td>
             </tr>
             <tr>
                 <td>2026-04-03</td>
                 <td>設計師</td>
-                <td>線上面試</td>
                 <td><button class="view-btn">查看</button></td>
+                <td><button class="download-btn">下載</button></td>
             </tr>
         </tbody>
     </table>

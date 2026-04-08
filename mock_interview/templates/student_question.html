@@ -76,32 +76,6 @@
     }
 </style>
 
-<script>
-    document.getElementById("imageUpload").addEventListener("change", function (event) {
-        const preview = document.getElementById("preview");
-        preview.innerHTML = ""; // 清空舊圖
-
-        const files = event.target.files;
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-
-            if (!file.type.startsWith("image/")) continue;
-
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-                const img = document.createElement("img");
-                img.src = e.target.result;
-                img.classList.add("preview-img");
-                preview.appendChild(img);
-            };
-
-            reader.readAsDataURL(file);
-        }
-    });
-</script>
-
 <div class="info-container">
 
     <h2>問題回報</h2>
@@ -115,12 +89,13 @@
     <textarea placeholder="請詳細描述您遇到的問題..."></textarea>
 
     <!-- 圖片上傳 -->
-    <label>上傳圖片</label>
+    <label>上傳圖片(可多張)</label>
     <input type="file" id="imageUpload" multiple accept="image/*">
 
+    <!-- 預覽按鈕 -->
+    <button type="button" onclick="previewImages()">預覽圖片</button>
     <!-- 預覽區 -->
     <div id="preview"></div>
-
     <button class="save-btn">
         上傳
     </button>

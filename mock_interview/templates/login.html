@@ -101,6 +101,24 @@
             background-color: #e0e8ff;
         }
 
+        .forgot-password {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .forgot-password a {
+            color: #d93025;
+            /* 紅色 */
+            font-size: 14px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+            color: #a61b1b;
+        }
+
         .footer-text {
             margin-top: 25px;
             font-size: 13px;
@@ -130,6 +148,11 @@
         <form action="/register" method="GET">
             <input type="submit" value="尚未註冊？前往註冊" class="register-btn">
         </form>
+
+        <!-- 忘記密碼 -->
+        <div class="forgot-password">
+            <a href="/forgot-password">忘記密碼？</a>
+        </div>
 
         <div class="footer-text">© 面試模擬系統｜祝您面試順利</div>
     </div>

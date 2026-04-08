@@ -74,20 +74,36 @@
         box-shadow: 0 0 6px rgba(42, 82, 152, 0.2);
     }
 
-    /* 儲存按鈕 */
-    .save-btn {
-        margin-top: 20px;
+    .next-btn {
         width: 100%;
         padding: 12px;
         font-size: 16px;
         font-weight: bold;
         color: white;
         background: linear-gradient(135deg, #2a5298, #1e3c72);
+        border: none;
         border-radius: 10px;
+        cursor: pointer;
+        margin-bottom: 10px;
     }
 
-    .save-btn:hover {
+    .next-btn:hover {
         opacity: 0.9;
+    }
+
+    .back-btn {
+        width: 100%;
+        padding: 10px;
+        font-size: 15px;
+        color: #2a5298;
+        background-color: #f0f4ff;
+        border: 1px solid #2a5298;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    .back-btn:hover {
+        background-color: #e0e8ff;
     }
 
     /* ===== 表格 ===== */
@@ -99,29 +115,30 @@
         border-radius: 10px;
     }
 
+    /* 表頭 */
+    th {
+        background: #e3eaf3;
+        /* 淡灰藍 */
+        color: #2c3e50;
+        font-weight: 600;
+    }
+
+    /* 儲存格 */
     th,
     td {
         padding: 14px;
         text-align: center;
+        border-bottom: 1px solid #eef2f7;
     }
 
-    th {
-        background: linear-gradient(135deg, #1e3c72, #2a5298);
-        color: white;
-        font-weight: 600;
-    }
-
-    tr {
-        transition: 0.3s;
-    }
-
+    /* 偶數列 */
     tr:nth-child(even) {
-        background-color: #f8faff;
+        background-color: #f9fbfd;
     }
 
+    /* hover（變淡，不要太亮） */
     tr:hover {
-        background-color: #e6f0ff;
-        transform: scale(1.01);
+        background-color: #f1f6fb;
     }
 
     /* 按鈕 */
@@ -130,16 +147,17 @@
         padding: 8px 16px;
         border: none;
         border-radius: 20px;
-        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        background: #6b8bb6;
+        /* 柔和藍 */
         color: white;
         cursor: pointer;
-        transition: 0.3s;
+        transition: 0.2s;
         font-size: 14px;
     }
 
-    .view-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    .view-btn:hover,
+    .download-btn:hover {
+        background: #5a7aa3;
     }
 
     /* 區塊切換動畫 */
@@ -216,8 +234,7 @@
     <!-- ===== 表單 ===== -->
     <div id="resume-form" style="display:none;">
         <h2>上傳履歷</h2>
-        <button onclick="showList()" class="back-btn">← 返回列表</button><br>
-
+       
         <label>請選擇要上傳的類型</label>
         <select name="role" class="role-select" id="role">
             <option value="student">升學</option>
@@ -333,8 +350,8 @@
             </tr>
 
         </table>
-        <button class="save-btn">儲存</button>
-
+        <button type="submit" class="next-btn">儲存</button>
+        <button type="button" class="back-btn" onclick="showList()" >返回履歷紀錄</button>
     </div>
 
 </div>
