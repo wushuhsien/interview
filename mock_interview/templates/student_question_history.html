@@ -160,7 +160,6 @@
         <thead>
             <tr>
                 <th>時間</th>
-                <th>問題標題</th>
                 <th>處理狀態</th>
                 <th>查看</th>
             </tr>
@@ -168,11 +167,10 @@
         <tbody>
             <tr>
                 <td>2026-04-01</td>
-                <td>登入失敗問題</td>
                 <td class="status-pending">未處理</td>
                 <td>
                     <button class="view-btn"
-                        onclick="showDetail('2026-04-01','登入失敗問題','使用者無法登入系統，顯示404錯誤','未處理','https://via.placeholder.com/300')">
+                        onclick="showDetail('2026-04-01','使用者無法登入系統，顯示404錯誤','未處理','https://via.placeholder.com/300')">
                         查看
                     </button>
                 </td>
@@ -180,11 +178,10 @@
 
             <tr>
                 <td>2026-03-30</td>
-                <td>履歷上傳失敗</td>
                 <td class="status-done">已處理</td>
                 <td>
                     <button class="view-btn"
-                        onclick="showDetail('2026-03-30','履歷上傳失敗','PDF檔案上傳時出現錯誤','已處理','https://via.placeholder.com/300')">
+                        onclick="showDetail('2026-03-30','PDF檔案上傳時出現錯誤','已處理','https://via.placeholder.com/300')">
                         查看
                     </button>
                 </td>
@@ -199,7 +196,6 @@
         <span class="close-btn" onclick="closeModal()">✖</span>
         <h3>問題詳細資訊</h3>
         <p><strong>時間：</strong><span id="d-time"></span></p>
-        <p><strong>標題：</strong><span id="d-title"></span></p>
         <p><strong>問題敘述：</strong><span id="d-desc"></span></p>
         <p><strong>狀態：</strong><span id="d-status"></span></p>
         <p><strong>圖片：</strong><br>

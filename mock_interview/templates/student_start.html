@@ -254,7 +254,6 @@
             console.log("有進來"); // ⭐測試用
 
             document.getElementById("d-time").innerText = time;
-            document.getElementById("d-title").innerText = title;
             document.getElementById("d-desc").innerText = desc;
             document.getElementById("d-status").innerText = status;
 
@@ -385,9 +384,8 @@
             </div>
             <button onclick="toggleMenu()">面試模擬 ▼</button>
             <div id="analysisMenu" class="submenu">
-                <button onclick="location.href='/mock_interview'">面試對話AI模擬</button>
-                <button onclick="alert('題庫練習')">題庫練習</button>
-                <button onclick="location.href='/ai_practice'">AI題目練習</button>
+                <button onclick="location.href='/mock_interview'">升學模擬</button>
+                <button onclick="location.href='/ai_practice'">就業模擬</button>
             </div>
             <button onclick="loadPage('/student_question')">問題回報</button>
 
