@@ -1,21 +1,21 @@
 <style>
     .info-container {
         width: 900px;
-        /* 變寬 */
-        background: white;
+        background: rgba(255, 255, 255, 0.95);
         padding: 40px 60px;
-        /* 內距變大 */
-        border-radius: 14px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        margin: 40px auto;
-        /* 置中 */
+        border-radius: 18px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        margin: 50px auto;
+        backdrop-filter: blur(10px);
     }
 
     .info-container h2 {
         margin-top: 0;
         color: #1e3c72;
         text-align: center;
-        margin-bottom: 25px;
+        margin-bottom: 30px;
+        font-size: 28px;
+        letter-spacing: 2px;
     }
 
     .info-container input,
@@ -115,7 +115,7 @@
     <textarea placeholder="請詳細描述您遇到的問題..."></textarea>
 
     <!-- 圖片上傳 -->
-    <label>上傳圖片（可多張）</label>
+    <label>上傳圖片</label>
     <input type="file" id="imageUpload" multiple accept="image/*">
 
     <!-- 預覽區 -->

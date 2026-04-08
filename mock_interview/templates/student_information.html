@@ -65,6 +65,10 @@
         display: none;
     }
 
+    .btn-group {
+        padding: 10px;
+    }
+
     .next-btn {
         width: 100%;
         padding: 12px;
@@ -98,36 +102,36 @@
     }
 </style>
 <script>
-function initStudentForm() {
-    const roleSelect = document.getElementById("role-select");
-    const studentFields = document.getElementById("student-fields");
-    const workFields = document.getElementById("work-fields");
+    function initStudentForm() {
+        const roleSelect = document.getElementById("role-select");
+        const studentFields = document.getElementById("student-fields");
+        const workFields = document.getElementById("work-fields");
 
-    // ⭐ 防呆（避免抓不到元素爆掉）
-    if (!roleSelect || !studentFields || !workFields) return;
+        // ⭐ 防呆（避免抓不到元素爆掉）
+        if (!roleSelect || !studentFields || !workFields) return;
 
-    function toggleFields() {
-        const isStudent = roleSelect.value === "student";
+        function toggleFields() {
+            const isStudent = roleSelect.value === "student";
 
-        studentFields.style.display = isStudent ? "block" : "none";
-        workFields.style.display = isStudent ? "none" : "block";
+            studentFields.style.display = isStudent ? "block" : "none";
+            workFields.style.display = isStudent ? "none" : "block";
 
-        const sType = document.querySelector("[name='s_type']");
-        const wGroup = document.querySelector("[name='w_type_group']");
-        const wJob = document.querySelector("[name='w_type_job']");
+            const sType = document.querySelector("[name='s_type']");
+            const wGroup = document.querySelector("[name='w_type_group']");
+            const wJob = document.querySelector("[name='w_type_job']");
 
-        if (sType) sType.required = isStudent;
-        if (wGroup) wGroup.required = !isStudent;
-        if (wJob) wJob.required = !isStudent;
+            if (sType) sType.required = isStudent;
+            if (wGroup) wGroup.required = !isStudent;
+            if (wJob) wJob.required = !isStudent;
+        }
+
+        // 初始化
+        toggleFields();
+
+        // 綁定事件（避免重複綁）
+        roleSelect.removeEventListener("change", toggleFields);
+        roleSelect.addEventListener("change", toggleFields);
     }
-
-    // 初始化
-    toggleFields();
-
-    // 綁定事件（避免重複綁）
-    roleSelect.removeEventListener("change", toggleFields);
-    roleSelect.addEventListener("change", toggleFields);
-}
 </script>
 <div class="info-container">
 

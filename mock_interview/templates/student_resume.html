@@ -1,48 +1,340 @@
 <style>
     .info-container {
         width: 900px;
-        /* 變寬 */
-        background: white;
+        background: rgba(255, 255, 255, 0.95);
         padding: 40px 60px;
-        /* 內距變大 */
-        border-radius: 14px;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        margin: 40px auto;
-        /* 置中 */
+        border-radius: 18px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        margin: 50px auto;
+        backdrop-filter: blur(10px);
     }
 
     .info-container h2 {
         margin-top: 0;
         color: #1e3c72;
         text-align: center;
-        margin-bottom: 25px;
+        margin-bottom: 30px;
+        font-size: 28px;
+        letter-spacing: 2px;
     }
 
+
+    /* 區塊標題 + 按鈕 */
+    .header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    /* 按鈕通用 */
+    button {
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        padding: 8px 14px;
+        font-size: 14px;
+    }
+
+    /* 新增按鈕 */
+    .add-btn {
+        background: #2a5298;
+        color: white;
+    }
+
+    .add-btn:hover {
+        background: #1e3c72;
+    }
+
+    /* 返回按鈕 */
+    .back-btn {
+        background: #ccc;
+        margin-bottom: 15px;
+    }
+
+    .back-btn:hover {
+        background: #aaa;
+    }
+
+    /* 表單 */
+    input,
+    select {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 12px;
+        border: 1px solid #ccc;
+        font-size: 15px;
+        transition: 0.2s;
+    }
+
+    input:focus,
+    select:focus {
+        border-color: #2a5298;
+        box-shadow: 0 0 6px rgba(42, 82, 152, 0.2);
+    }
+
+    /* 儲存按鈕 */
     .save-btn {
-        margin-top: 25px;
+        margin-top: 20px;
         width: 100%;
         padding: 12px;
         font-size: 16px;
         font-weight: bold;
         color: white;
         background: linear-gradient(135deg, #2a5298, #1e3c72);
-        border: none;
         border-radius: 10px;
-        cursor: pointer;
     }
 
     .save-btn:hover {
         opacity: 0.9;
     }
+
+    /* ===== 表格 ===== */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 16px;
+        overflow: hidden;
+        border-radius: 10px;
+    }
+
+    th,
+    td {
+        padding: 14px;
+        text-align: center;
+    }
+
+    th {
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        font-weight: 600;
+    }
+
+    tr {
+        transition: 0.3s;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f8faff;
+    }
+
+    tr:hover {
+        background-color: #e6f0ff;
+        transform: scale(1.01);
+    }
+
+    /* 按鈕 */
+    .view-btn,
+    .download-btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 20px;
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: white;
+        cursor: pointer;
+        transition: 0.3s;
+        font-size: 14px;
+    }
+
+    .view-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 區塊切換動畫 */
+    #resume-form,
+    #resume-list {
+        transition: all 0.3s ease;
+    }
+
+    /* 欄位間距 */
+    #student-fields,
+    #work-fields {
+        margin-top: 10px;
+    }
+
+    .resume-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        font-size: 14px;
+    }
+
+    .resume-table td {
+        border: 1px solid #333;
+        padding: 8px;
+        text-align: center;
+    }
+
+    .resume-table input {
+        width: 90%;
+        border: none;
+        outline: none;
+        padding: 6px;
+        background: transparent;
+    }
+
+    .resume-table label {
+        margin-right: 10px;
+    }
 </style>
 
+<script>
+
+</script>
 
 <div class="info-container">
 
-    <h2>上傳履歷</h2>
+    <!-- ===== 履歷列表 ===== -->
+    <div id="resume-list">
+        <h2>履歷紀錄</h2>
+        <div class="header-bar">
+            <button type="button" onclick="showForm()" class="add-btn">+ 新增</button>
+        </div>
 
-    <button class="save-btn">
-        儲存
-    </button>
+        <table>
+            <thead>
+                <tr>
+                    <th>時間</th>
+                    <th>科系 / 職業</th>
+                    <th>查看</th>
+                    <th>下載</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2026-04-01</td>
+                    <td>資訊工程系</td>
+                    <td><button class="view-btn">查看</button></td>
+                    <td><button class="download-btn">下載</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ===== 表單 ===== -->
+    <div id="resume-form" style="display:none;">
+        <h2>上傳履歷</h2>
+        <button onclick="showList()" class="back-btn">← 返回列表</button><br>
+
+        <label>請選擇要上傳的類型</label>
+        <select name="role" class="role-select" id="role">
+            <option value="student">升學</option>
+            <option value="work">就業</option>
+        </select>
+
+        <!-- 升學 -->
+        <div id="student-fields">
+            <label>專業/科系：</label>
+            <select name="s_type">
+                <option value="">請選擇</option>
+                <?php foreach ($storeTypes as $type): ?>
+                <option value="<?php echo $type; ?>">
+                    <?php echo $type; ?>
+                </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <!-- 就業 -->
+        <div id="work-fields">
+            <label>職群：</label>
+            <select name="w_type_group">
+                <option value="">請選擇</option>
+                <?php foreach ($storeTypes as $type): ?>
+                <option value="<?php echo $type; ?>">
+                    <?php echo $type; ?>
+                </option>
+                <?php endforeach; ?>
+            </select>
+
+            <label>職位：</label>
+            <select name="w_type_job">
+                <option value="">請選擇</option>
+                <?php foreach ($storeTypes as $type): ?>
+                <option value="<?php echo $type; ?>">
+                    <?php echo $type; ?>
+                </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <table class="resume-table">
+            <!-- 基本資料 -->
+            <tr>
+                <td rowspan="4">基本資料</td>
+                <td>姓名</td>
+                <td><input type="text" name="name"></td>
+                <td>電話</td>
+                <td><input type="text" name="phone"></td>
+                <td rowspan="4" style="width:120px;">照片</td>
+            </tr>
+
+            <tr>
+                <td>Email</td>
+                <td colspan="3"><input type="text" name="email"></td>
+            </tr>
+
+            <tr>
+                <td>地址</td>
+                <td colspan="3"><input type="text" name="address"></td>
+            </tr>
+
+            <tr>
+                <td>學歷</td>
+                <td colspan="3">
+                    <label><input type="checkbox"> 高中</label>
+                    <label><input type="checkbox"> 大學</label>
+                    <label><input type="checkbox"> 碩士</label>
+                    <label><input type="checkbox"> 博士</label>
+                </td>
+            </tr>
+
+            <!-- 工作經歷 -->
+            <tr>
+                <td rowspan="3">工作經歷</td>
+                <td>公司名稱</td>
+                <td>職稱</td>
+                <td>期間</td>
+                <td colspan="2">內容</td>
+            </tr>
+
+            <tr>
+                <td><input></td>
+                <td><input></td>
+                <td><input placeholder="2023-2024"></td>
+                <td colspan="2"><input></td>
+            </tr>
+
+            <tr>
+                <td><input></td>
+                <td><input></td>
+                <td><input></td>
+                <td colspan="2"><input></td>
+            </tr>
+
+            <!-- 技能 -->
+            <tr>
+                <td>技能</td>
+                <td colspan="5">
+                    <input placeholder="例如：Word、Excel、程式設計">
+                </td>
+            </tr>
+
+            <!-- 語言 -->
+            <tr>
+                <td>語言能力</td>
+                <td colspan="4">
+                    <label><input type="checkbox"> 中文</label>
+                    <label><input type="checkbox"> 英文</label>
+                    <label><input type="checkbox"> 日文</label>
+                </td>
+            </tr>
+
+        </table>
+        <button class="save-btn">儲存</button>
+
+    </div>
 
 </div>

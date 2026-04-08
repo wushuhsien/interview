@@ -289,6 +289,39 @@
                 if (submenu) submenu.style.display = "none";
             }
         }
+
+        // 履歷新增
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const roleSelect = document.getElementById("role");
+            const studentFields = document.getElementById("student-fields");
+            const workFields = document.getElementById("work-fields");
+
+            function toggleFields() {
+                if (roleSelect.value === "student") {
+                    studentFields.style.display = "block";
+                    workFields.style.display = "none";
+                } else {
+                    studentFields.style.display = "none";
+                    workFields.style.display = "block";
+                }
+            }
+
+            roleSelect.addEventListener("change", toggleFields);
+            toggleFields();
+
+        });
+
+        /* 切換頁面這兩個可以放外面 */
+        function showForm() {
+            document.getElementById("resume-list").style.display = "none";
+            document.getElementById("resume-form").style.display = "block";
+        }
+
+        function showList() {
+            document.getElementById("resume-list").style.display = "block";
+            document.getElementById("resume-form").style.display = "none";
+        }
     </script>
 </head>
 
