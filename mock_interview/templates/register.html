@@ -117,20 +117,6 @@
             color: #888;
         }
 
-        .role-select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-            margin-bottom: 15px;
-        }
-
-        .role-select:focus {
-            outline: none;
-            border-color: #2a5298;
-        }
-
         .gender-group {
             display: flex;
             gap: 25px;
@@ -208,47 +194,6 @@
             <label for="password">確認密碼</label>
             <input type="password" name="confirm_password" placeholder="確認密碼" required><br>
 
-            <label for="role">選擇身分</label>
-            <select name="role" class="role-select"> <!-- 接資料庫角色代碼 -->
-                <option value="student">升學</option>
-                <option value="work">就業</option>
-            </select><br>
-
-            <!-- 升學 -->
-            <div id="student-fields">
-                <label><span class="required"></span>專業/科系：</label>
-                <select name="s_type">
-                    <option value="">請選擇</option>
-                    <?php foreach ($storeTypes as $type): ?>
-                    <option value="<?php echo $type; ?>">
-                        <?php echo $type; ?>
-                    </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-
-            <!-- 就業 -->
-            <div id="work-fields">
-                <label><span class="required"></span>職群：</label>
-                <select name="w_type_group">
-                    <option value="">請選擇</option>
-                    <?php foreach ($storeTypes as $type): ?>
-                    <option value="<?php echo $type; ?>">
-                        <?php echo $type; ?>
-                    </option>
-                    <?php endforeach; ?>
-                </select>
-
-                <label><span class="required"></span>職位：</label>
-                <select name="w_type_job">
-                    <option value="">請選擇</option>
-                    <?php foreach ($storeTypes as $type): ?>
-                    <option value="<?php echo $type; ?>">
-                        <?php echo $type; ?>
-                    </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
 
             <label><span class="required"></span>性別：</label>
 
