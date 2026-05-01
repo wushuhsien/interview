@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>XXX公司 人才招募網</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #206c8b;
+      --primary-dark: #174f67;
+      --primary-light: #c2dfe9;
+      --bg-page: #efefef;
+      --bg-nav: #206c8b;
+      --bg-card: #efefef;
+      --text-main: #1a1a1a;
+      --text-muted: #555;
+      --white: #ffffff;
+      --gray: #efefef;
+      --radius-pill: 999px;
+      --radius-card: 18px;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background: var(--gray);
+      color: var(--text-main);
+      min-height: 100vh;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      height: 72px;
+      border-bottom: 2px solid var(--primary-dark);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+      text-decoration: none;
+    }
+
+    .logo-circle {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .nav-btn {
+      padding: 9px 22px;
+      border-radius: var(--radius-pill);
+      border: 2px solid transparent;
+      background: transparent;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--white);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255,255,255,0.15);
+      color: var(--white);
+    }
+
+    .nav-btn.active {
+      background: var(--white);
+      color: var(--primary);
+      border-color: var(--white);
+      font-weight: 700;
+    }
+
+    .nav-user {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+      flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,0.5);
+    }
+
+    .nav-user:hover { background: rgba(255,255,255,0.35); }
+
+    /* ── HERO BANNER ── */
+    .hero {
+      background: var(--white);
+      color: var(--text-main);
+      text-align: center;
+      padding: 64px 32px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      color: var(--primary);
+    }
+
+    .hero p {
+      font-size: 17px;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    .hero-btn {
+      display: inline-block;
+      padding: 12px 36px;
+      border-radius: var(--radius-pill);
+      background: var(--primary);
+      color: var(--white);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+
+    .hero-btn:hover { background: var(--primary-dark); }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      padding: 36px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: var(--gray);
+    }
+
+    /* 公告 */
+    .section-label {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-label::before {
+      content: '';
+      display: inline-block;
+      width: 5px;
+      height: 20px;
+      background: var(--primary);
+      border-radius: 3px;
+    }
+
+    .announce-card {
+      background: var(--white);
+      border-radius: var(--radius-card);
+      padding: 28px 32px;
+      border: 1px solid #ddd;
+    }
+
+    .announce-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .announce-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid #e0e0e0;
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+
+    .announce-item:last-child { border-bottom: none; }
+    .announce-item:hover .announce-title { color: var(--primary); }
+
+    .announce-date {
+      font-size: 13px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      min-width: 90px;
+    }
+
+    .announce-badge {
+      background: var(--primary);
+      color: var(--white);
+      font-size: 12px;
+      padding: 2px 10px;
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
+    }
+
+    .announce-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--text-main);
+      flex: 1;
+    }
+
+    /* 熱門職缺 */
+    .job-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    .job-card {
+      background: var(--white);
+      border-radius: var(--radius-card);
+      padding: 22px 20px;
+      cursor: pointer;
+      transition: transform 0.18s, box-shadow 0.18s;
+      border: 1.5px solid #ddd;
+    }
+
+    .job-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(32,108,139,0.13);
+      border-color: var(--primary);
+    }
+
+    .job-dept {
+      font-size: 12px;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+    }
+
+    .job-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .job-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .tag {
+      background: #dde8ed;
+      color: var(--primary-dark);
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--primary);
+      color: rgba(255,255,255,0.75);
+      text-align: center;
+      padding: 24px 32px;
+      font-size: 13px;
+      margin-top: 40px;
+    }
+
+    footer a { color: rgba(255,255,255,0.85); text-decoration: none; }
+    footer a:hover { color: #fff; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a class="nav-brand" href="#">
+      <div class="logo-circle">LOGO</div>
+      <span class="brand-name">XXX公司</span>
+    </a>
+    <div class="nav-links">
+      <button class="nav-btn active" onclick="setActive(this)">首頁</button>
+      <button class="nav-btn" onclick="setActive(this)">職缺搜尋</button>
+      <button class="nav-btn" onclick="setActive(this)">公司介紹</button>
+      <button class="nav-btn" onclick="setActive(this)">求職Q&amp;A</button>
+    </div>
+    <div class="nav-user" title="會員登入">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="8" r="4" fill="#fff"/>
+        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>加入我們，共創未來</h1>
+    <p>探索 XXX 公司最新職缺，找到最適合你的舞台</p>
+    <button class="hero-btn">立即搜尋職缺</button>
+  </section>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- 公告 -->
+    <section>
+      <div class="section-label">最新公告</div>
+      <div class="announce-card">
+        <ul class="announce-list">
+          <li class="announce-item">
+            <span class="announce-date">2026-05-01</span>
+            <span class="announce-badge">最新</span>
+            <span class="announce-title">2026 校園徵才活動開始報名，歡迎應屆畢業生踴躍參加</span>
+          </li>
+          <li class="announce-item">
+            <span class="announce-date">2026-04-20</span>
+            <span class="announce-badge">公告</span>
+            <span class="announce-title">系統維護通知：5/5 凌晨 2:00–4:00 暫停服務</span>
+          </li>
+          <li class="announce-item">
+            <span class="announce-date">2026-04-10</span>
+            <span class="announce-badge">公告</span>
+            <span class="announce-title">面試流程更新說明，請應徵者務必詳閱</span>
+          </li>
+          <li class="announce-item">
+            <span class="announce-date">2026-03-28</span>
+            <span class="announce-badge">活動</span>
+            <span class="announce-title">2026 年度職涯講座報名連結開放，名額有限請盡速報名</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 熱門職缺 -->
+    <section>
+      <div class="section-label">熱門職缺</div>
+      <div class="job-grid">
+        <div class="job-card">
+          <div class="job-dept">資訊技術部</div>
+          <div class="job-title">前端工程師</div>
+          <div class="job-tags">
+            <span class="tag">台北</span>
+            <span class="tag">全職</span>
+            <span class="tag">3年以上</span>
+          </div>
+        </div>
+        <div class="job-card">
+          <div class="job-dept">產品管理部</div>
+          <div class="job-title">產品經理 PM</div>
+          <div class="job-tags">
+            <span class="tag">台北</span>
+            <span class="tag">全職</span>
+            <span class="tag">5年以上</span>
+          </div>
+        </div>
+        <div class="job-card">
+          <div class="job-dept">人力資源部</div>
+          <div class="job-title">HR 招募專員</div>
+          <div class="job-tags">
+            <span class="tag">台中</span>
+            <span class="tag">全職</span>
+            <span class="tag">1年以上</span>
+          </div>
+        </div>
+        <div class="job-card">
+          <div class="job-dept">行銷部</div>
+          <div class="job-title">數位行銷專員</div>
+          <div class="job-tags">
+            <span class="tag">台北</span>
+            <span class="tag">全職</span>
+            <span class="tag">2年以上</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 XXX公司 版權所有 ｜ <a href="#">隱私權政策</a> ｜ <a href="#">聯絡我們</a></p>
+  </footer>
+
+  <script>
+    function setActive(btn) {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>
