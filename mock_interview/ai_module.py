@@ -1,10 +1,20 @@
 import os
+from dotenv import load_dotenv
 from google import genai
 from google.genai import types
-from dotenv import load_dotenv
-load_dotenv()
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+load_dotenv(".env")
+
+api_key = os.getenv("GEMINI_API_KEY")
+if not api_key:
+    raise ValueError("GEMINI_API_KEY 沒有設定")
+
+client = genai.Client(api_key=api_key)
+
+# （可選 debug）
+# for m in client.models.list():
+#     print(m.name)
+
 
 def generate_question(identity, position, category):
     prompt = f"""
@@ -12,21 +22,19 @@ def generate_question(identity, position, category):
 請針對「{category}」這個類別，生成一題該職位最常被問到的「經典面試問題」。
 
 【要求】：
-1. 語氣：自然口語，像真人面試官在聊天，不要太生硬。
-2. 內容：必須精準符合「{position}」的職場情境。
-3. 優先度：優先選擇該類別中最常見、最必問的題目（例如：{category}如果是自我介紹，就直接問自我介紹）。
-4. 長度：約 15~20 字。
-5. 限制：只輸出問題文字，不要有標號或額外解釋。
+1. 自然口語
+2. 精準符合職位
+3. 15~20字
+4. 只輸出問題
 
-範例參考：
-- 若類別是「能力與經驗」，可以問：針對{position}這個角色，你過去最成功的專案經驗是什麼？
-- 若類別是「求職動機」，可以問：你為什麼會想來應徵我們公司的{position}，而不是去其他公司？
+不要任何解釋或標號。
 """
+
     response = client.models.generate_content(
         model="gemini-2.5-flash",
         contents=prompt,
         config=types.GenerateContentConfig(
-            max_output_tokens=800,
+            max_output_tokens=200,
             temperature=0.7,
         )
     )
